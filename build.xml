@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="scms" default="all" basedir=".">
+	<property file="build.properties" />
+
+	<target name="all">
+		<echo message="Use special command for build, move or release" />
+	</target>
+
+	<target name="packageDevelopment">
+		<exec executable="${maven.command}" failonerror="true">
+			<arg line="package -P development" />
+		</exec>
+	</target>
+	
+	<target name="packageProduction">
+			<exec executable="${maven.command}" failonerror="true">
+				<arg line="package -P production" />
+			</exec>
+		</target>
+
+	<target name="deployToGlassFish">
+		<copy overwrite="true" file="target/scms.war" todir="${glassfish.domain.path}/autodeploy" />
+	</target>
+
+	<target name="packageDevAndDeploy" depends="packageDevelopment, deployToGlassFish" />
+	<target name="packageProdAndDeploy" depends="packageProduction, deployToGlassFish" />
+
+	<target name="clean">
+		<exec executable="${maven.command}" failonerror="true">
+			<arg line="clean" />
+		</exec>
+	</target>
+
+	<target name="package web-resources">
+		<copy todir="${glassfish.domain.path}/applications/scms">
+			<fileset dir="src/main/webapp" />
+		</copy>
+	</target>
+</project>
