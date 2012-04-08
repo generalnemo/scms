@@ -1,0 +1,55 @@
+/* Общие стили */
+html, body { margin: 0; padding: 0; font-size: 14px; color: black; height: 100%;
+             background: url("#{resource['img:bg.jpg']}") bottom right no-repeat;
+             background-attachment: fixed;
+             font: normal 12px Arial, Helvetica, sans-serif; }
+a:hover { text-decoration: none; }
+h1 {
+  font-size: 26px;
+  font-weight: normal;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .7), 0px 2px 0 rgba(0, 0, 0, .5);
+  text-transform: uppercase;
+  text-align: center;
+  color: #666;
+  margin: 0 0 10px 0;
+  letter-spacing: 4px;
+  position: relative;
+}
+h2 { font-size: 14px; margin: 0 0 10px; }
+div#container { position: relative; margin:0 auto; width: 1000px; height: auto !important; height: 100%; min-height: 100%;}
+div#header { padding: 10px; }
+div#content { padding: 5px 5px 40px; }
+div#footer { position: absolute; width: 100%; bottom: 5px; }
+
+/* Clearfix method */
+.clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+* html .clearfix { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+/* Заголовок */
+#header { text-align: center; }
+#header .logout-form { position: absolute; top: 20px; right: 0; }
+#header .logout-form .user-name { font-style: italic; font-size: 14px; color: #333; }
+
+/* Реестр (общее) */
+.catalog table.filter { width: 750px; text-align: center; margin-bottom: 10px; }
+.catalog a.add { float: right; margin-top: 10px; }
+.catalog table a.button { width: 90px; }
+.catalog h1 { font-size: 20px; }
+
+/* Редактирование объекта */
+.edit-object h1 { font-size: 20px; }
+.edit-object h3 { text-align: center; }
+.edit-object table { margin: 0 auto;}
+.edit-object table td.label { vertical-align: top; padding-top: 5px; width: 200px; }
+.edit-object table td.label span { color: red; }
+.edit-object table td.field input { width: 200px; }
+.edit-object table td.field .country { font-weight: bold; }
+.edit-object table td.field select { width: 200px; }
+.edit-object table td .hint { color: red; font-style: italic; }
+.edit-object .buttons { text-align: center; }
+.edit-object table.view-table tr td { border-bottom: 1px dotted black;}
+
+/* Просмотр */
+.edit-object table.view-media-list { margin: 0; }
+.edit-object table.view-media-list tr td { border-bottom: none;}

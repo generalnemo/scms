@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.2 http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.2.xsd">
+  <url-mapping id="home">
+    <pattern value="/" />
+    <view-id value="/index.jsf" />
+  </url-mapping>
+  <url-mapping id="404">
+    <pattern value="/404" />
+    <view-id value="/404.jsf" />
+  </url-mapping>
+  <url-mapping id="500">
+    <pattern value="/500" />
+    <view-id value="/500.jsf" />
+  </url-mapping>
+  <url-mapping id="error">
+    <pattern value="/error" />
+    <view-id value="/error.jsf" />
+  </url-mapping>
+  <!-- Авторизация -->
+  <url-mapping id="login">
+    <pattern value="/login" />
+    <view-id value="/login.jsf" />
+  </url-mapping>
+  <url-mapping id="noauth">
+    <pattern value="/noauth" />
+    <view-id value="/noauth.jsf" />
+  </url-mapping>
+</pretty-config>

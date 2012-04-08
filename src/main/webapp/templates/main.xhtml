@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:composite="http://java.sun.com/jsf/composite" xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" encoding="UTF-8">
+  <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      <ui:insert name="windowTitle">Система поддержки проектной документации программных проектов ФГУП "МОКБ МАРС"</ui:insert>
+    </title>
+    
+    <h:outputStylesheet library="css" name="styles.css" />
+    <h:outputStylesheet library="css" name="menu.css" />
+    <ui:insert name="css" />
+    <h:outputScript library="js" name="common.js" target="head" />
+    <ui:insert name="js" />
+  </h:head>
+  <h:body>
+    <div id="container">
+      <div id="header">
+        <ui:insert name="header">
+          <ui:include src="/templates/header.xhtml" />
+        </ui:insert>
+      </div>
+      <nav>
+        <ui:insert name="menu">
+          <ui:include src="/templates/menu.xhtml" />
+        </ui:insert>
+      </nav>
+      <div id="content">
+        <ui:insert name="content" />
+      </div>
+      <div id="footer">
+        <ui:insert name="footer">
+          <ui:include src="/templates/footer.xhtml" />
+        </ui:insert>
+      </div>
+    </div>
+  </h:body>
+</f:view>
