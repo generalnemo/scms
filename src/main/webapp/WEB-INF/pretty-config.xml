@@ -6,7 +6,7 @@
     <view-id value="/index.jsf" />
   </url-mapping>
   <url-mapping id="userHome">
-    <pattern value="/mydocuments" />
+    <pattern value="/cabinet/mydocuments" />
     <view-id value="/cabinet/userPage.jsf" />
   </url-mapping>
   <url-mapping id="404">
