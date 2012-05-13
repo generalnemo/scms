@@ -5,6 +5,10 @@
     <pattern value="/" />
     <view-id value="/index.jsf" />
   </url-mapping>
+  <url-mapping id="userHome">
+    <pattern value="/mydocuments" />
+    <view-id value="/cabinet/userPage.jsf" />
+  </url-mapping>
   <url-mapping id="404">
     <pattern value="/404" />
     <view-id value="/404.jsf" />

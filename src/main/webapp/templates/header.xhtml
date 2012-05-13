@@ -6,7 +6,6 @@
   xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:composite="http://java.sun.com/jsf/composite" xmlns:c="http://java.sun.com/jsp/jstl/core"
   xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui">
-  <h1>Система поддержки проектной документации программных проектов ФГУП "МОКБ МАРС"</h1>
   <h:form class="logout-form" rendered="#{user.currentUser != null}">
     <h:outputText value="#{user.currentUser.fullName} | " styleClass="user-name"/>
     <p:commandLink action="#{user.logout}" value="Выйти" />

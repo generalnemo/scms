@@ -1,4 +1,4 @@
-package org.scms.model.entity.exception;
+package org.scms.model.exception;
 
 public class EntityAlreadyExistsException extends Exception {
 
