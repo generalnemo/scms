@@ -6,13 +6,13 @@
 		<echo message="Use special command for build, move or release" />
 	</target>
 
-	<target name="packageDevelopment">
+	<target name="packageDevelopment" depends="clean">
 		<exec executable="${maven.command}" failonerror="true">
 			<arg line="package -P development" />
 		</exec>
 	</target>
 	
-	<target name="packageProduction">
+	<target name="packageProduction" depends="clean">
 			<exec executable="${maven.command}" failonerror="true">
 				<arg line="package -P production" />
 			</exec>

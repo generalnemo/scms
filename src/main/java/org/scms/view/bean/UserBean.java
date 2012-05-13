@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.scms.model.entity.User;
 import org.scms.service.UserService;
@@ -18,7 +19,7 @@ import org.scms.service.UserService;
 public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 3979771106094044331L;
-	
+
 	@Inject
 	private ExternalContext external;
 	@Inject
@@ -36,11 +37,17 @@ public class UserBean implements Serializable {
 	public String logout() throws ServletException {
 		getRequest().logout();
 		setCurrentUser(null);
+		getResponse().setHeader("Cache-Control",
+				"private, no-store, no-cache, must-revalidate");
 		return "/index.xhtml?faces-redirect=true";
 	}
 
 	private HttpServletRequest getRequest() {
 		return (HttpServletRequest) external.getRequest();
+	}
+
+	private HttpServletResponse getResponse() {
+		return (HttpServletResponse) external.getResponse();
 	}
 
 	public User getCurrentUser() {

@@ -12,8 +12,11 @@
 	xmlns:p="http://primefaces.org/ui">
 	<p:outputPanel rendered="#{!empty user.currentUser}">
 		<ul>
-			<li><a href="/cabinet/userPage.jsf"><h:outputText
-						value="Моя страница" /> </a></li>
+			<li>
+				<a href="/cabinet/mydocuments">
+					<h:outputText value="Мои документы" /> 
+				</a>
+			</li>
 		</ul>
 	</p:outputPanel>
 </ui:composition>

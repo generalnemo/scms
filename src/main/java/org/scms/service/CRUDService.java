@@ -10,10 +10,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.scms.model.entity.exception.EntityAlreadyExistsException;
+import org.scms.model.entity.AbstractTemporalModel;
+import org.scms.model.exception.EntityAlreadyExistsException;
 import org.scms.util.ReflectionUtil;
 
-public abstract class CRUDService<T> {
+public abstract class CRUDService<T extends AbstractTemporalModel> {
 
 	@Inject
 	protected EntityManager em;
@@ -42,7 +43,7 @@ public abstract class CRUDService<T> {
 
 	public void add(T object) throws Exception {
 		try {
-			em.persist(object);
+			em.persist(em.merge(object));
 		} catch (PersistenceException e) {
 			if (e.getMessage().contains("ConstraintViolationException")) {
 				throw new EntityAlreadyExistsException(e.getMessage(), e);
