@@ -1,5 +1,6 @@
 package org.scms.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ public class LogEntry extends AbstractTemporalModel {
 	private CItemOperationType type;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "logEntry", fetch = FetchType.LAZY)
-	private List<LogEntryEditedProperty> editedProperties;
+	private List<LogEntryEditedProperty> editedProperties = new ArrayList<LogEntryEditedProperty>();
 
 	private transient CItem cItemForEntryCreatedDate;
 

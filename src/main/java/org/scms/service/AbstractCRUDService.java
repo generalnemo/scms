@@ -15,7 +15,7 @@ import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.model.exception.EntityAlreadyExistsException;
 import org.scms.util.ReflectionUtil;
 
-public abstract class CRUDService<T extends AbstractIdentityModel> {
+public abstract class AbstractCRUDService<T extends AbstractIdentityModel> {
 
 	@Inject
 	protected EntityManager em;
@@ -26,7 +26,7 @@ public abstract class CRUDService<T extends AbstractIdentityModel> {
 	@SuppressWarnings("unchecked")
 	public Class<T> getEntityClass() {
 		return ReflectionUtil.getGenericParameterClass(this.getClass(),
-				CRUDService.class, 0);
+				AbstractCRUDService.class, 0);
 	}
 
 	public List<T> findAll() {

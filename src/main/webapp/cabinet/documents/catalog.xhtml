@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:composite="http://java.sun.com/jsf/composite" xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui"
+  xmlns:scms="http://scms.cyber.mephi.ru/facelets">
+  <ui:composition template="/templates/main.xhtml">
+    <ui:define name="content">
+      <h1>Поиск документов</h1>
+      <h:form id="form">
+      	<h:link value="Создать документ" outcome="/cabinet/documents/add" />
+      	<p:dataTable value="#{userDocumentCatalog.objects}" var="document" paginator="true"
+                         rows="10" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+				<p:column sortBy="#{document.name}">
+					<f:facet name="header">
+						<h:outputText value="Название" />
+					</f:facet>
+					<h:outputText value="#{document.name}" />
+				</p:column>
+				<p:column sortBy="#{document.createdBy.fullName}">
+					<f:facet name="header">
+						<h:outputText value="Автор" />
+					</f:facet>
+					<h:outputText value="#{document.createdBy.fullName}" />
+				</p:column>
+				<p:column sortBy="#{document.curator.fullName}">
+					<f:facet name="header">
+						<h:outputText value="Куратор" />
+					</f:facet>
+					<h:outputText value="#{document.curator.fullName}" />
+				</p:column>
+				<p:column sortBy="#{document.performer.fullName}">
+					<f:facet name="header">
+						<h:outputText value="Исполнитель" />
+					</f:facet>
+					<h:outputText value="#{document.performer.fullName}" />
+				</p:column>
+				<p:column sortBy="#{document.resourceManager.fullName}">
+					<f:facet name="header">
+						<h:outputText value="Владелец ресурсов" />
+					</f:facet>
+					<h:outputText value="#{document.resourceManager.fullName}" />
+				</p:column>
+				<p:column sortBy="#{document.controller.fullName}">
+					<f:facet name="header">
+						<h:outputText value="Контролер" />
+					</f:facet>
+					<h:outputText value="#{document.controller.fullName}" />
+				</p:column>
+				<p:column sortBy="#{document.createdAt}">
+					<f:facet name="header">
+						<h:outputText value="Дата создания" />
+					</f:facet>
+					<h:outputText value="#{document.createdAt}">
+						<f:convertDateTime pattern="dd.MM.yyyy hh:mm:ss" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>        
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</f:view>

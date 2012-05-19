@@ -1,5 +1,6 @@
 package org.scms.model.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,10 +64,10 @@ public class CItem extends AbstractTemporalModel {
 	private DifficultyScaleCoeff difficulty;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
-	private List<CItemRevision> revisions;
+	private List<CItemRevision> revisions = new ArrayList<CItemRevision>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
-	private List<LogEntry> logEntries;
+	private List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
 	public String getName() {
 		return name;

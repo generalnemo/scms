@@ -10,7 +10,7 @@ import org.scms.model.entity.CItem;
 import org.scms.service.filter.CItemSearchFilter;
 
 @Stateless
-public class CItemService extends ObjectService<CItemSearchFilter, CItem> {
+public class CItemService extends AbstractObjectService<CItemSearchFilter, CItem> {
 
 	@Override
 	public String completeTypedQueryString(CItemSearchFilter filter,

@@ -13,7 +13,7 @@ import org.jboss.solder.logging.Logger;
 import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.model.entity.User;
 import org.scms.model.exception.EntityAlreadyExistsException;
-import org.scms.service.CRUDService;
+import org.scms.service.AbstractCRUDService;
 import org.scms.service.UserService;
 
 public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
@@ -41,12 +41,14 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 	protected FacesContext fContext;
 
 	protected List<User> userList;
+	
+	protected String objectId;
 
 	protected T object;
 
 	protected abstract void pageLoad();
 
-	protected abstract CRUDService<T> getService();
+	protected abstract AbstractCRUDService<T> getService();
 
 	protected void init() {
 		userList = userService.findAllUsers();
@@ -119,5 +121,13 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	public void setObject(T object) {
 		this.object = object;
+	}
+
+	public String getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 }
