@@ -16,7 +16,7 @@ import org.scms.service.filter.AbstractSearchFilter;
 public abstract class ObjectService<F extends AbstractSearchFilter, T extends AbstractIdentityModel>
 		extends CRUDService<T> {
 
-	public abstract String completeQueryString(F filter, Map<String, Object> parametersMap);
+	public abstract String completeTypedQueryString(F filter, Map<String, Object> parametersMap);
 
 	public void initQueryParameters(Query query, Map<String, Object> parametersMap) {
 		if (parametersMap.isEmpty())
@@ -33,7 +33,7 @@ public abstract class ObjectService<F extends AbstractSearchFilter, T extends Ab
 
 	public TypedQuery<T> createTypedQuery(F filter) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		String queryString = completeQueryString(filter, parametersMap);
+		String queryString = completeTypedQueryString(filter, parametersMap);
 		TypedQuery<T> query = em.createQuery(queryString, getEntityClass());
 		initQueryParameters(query, parametersMap);
 		return query;
