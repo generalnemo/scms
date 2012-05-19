@@ -11,11 +11,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.jboss.solder.logging.Logger;
-import org.scms.model.entity.AbstractTemporalModel;
+import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.model.exception.EntityAlreadyExistsException;
 import org.scms.util.ReflectionUtil;
 
-public abstract class CRUDService<T extends AbstractTemporalModel> {
+public abstract class CRUDService<T extends AbstractIdentityModel> {
 
 	@Inject
 	protected EntityManager em;

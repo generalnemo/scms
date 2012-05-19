@@ -10,13 +10,13 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.jboss.solder.logging.Logger;
-import org.scms.model.entity.AbstractTemporalModel;
+import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.model.entity.User;
 import org.scms.model.exception.EntityAlreadyExistsException;
 import org.scms.service.CRUDService;
 import org.scms.service.UserService;
 
-public abstract class AbstractObjectBean<T extends AbstractTemporalModel>
+public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 		implements Serializable {
 
 	private static final long serialVersionUID = 6075393377754021363L;
@@ -33,15 +33,15 @@ public abstract class AbstractObjectBean<T extends AbstractTemporalModel>
 
 	@Inject
 	protected Logger logger;
-	
+
 	@Inject
 	protected UserService userService;
-	
+
 	@Inject
 	protected FacesContext fContext;
 
 	protected List<User> userList;
-	
+
 	protected T object;
 
 	protected abstract void pageLoad();

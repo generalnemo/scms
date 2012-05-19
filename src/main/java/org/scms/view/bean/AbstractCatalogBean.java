@@ -6,12 +6,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.scms.model.entity.AbstractTemporalModel;
+import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.service.CItemService;
 import org.scms.service.UserService;
 import org.scms.service.filter.CItemSearchFilter;
 
-public abstract class AbstractCatalogBean<T extends AbstractTemporalModel>
+public abstract class AbstractCatalogBean<T extends AbstractIdentityModel>
 		implements Serializable {
 
 	private static final long serialVersionUID = 442757784131722328L;
@@ -21,7 +21,7 @@ public abstract class AbstractCatalogBean<T extends AbstractTemporalModel>
 
 	@Inject
 	protected UserService userService;
-	
+
 	@Inject
 	protected UserBean userBean;
 

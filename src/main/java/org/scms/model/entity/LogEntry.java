@@ -23,12 +23,12 @@ public class LogEntry extends AbstractTemporalModel {
 	@JoinColumn(name = "citem_id", nullable = false, updatable = false)
 	private CItem cItem;
 
-	@Column(name = "operation_type")
+	@Column(name = "operation_type", nullable = false, updatable = false)
 	private CItemOperationType type;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "logEntry", fetch = FetchType.LAZY)
 	private List<LogEntryEditedProperty> editedProperties;
-	
+
 	private transient CItem cItemForEntryCreatedDate;
 
 	public CItem getcItem() {
@@ -59,7 +59,8 @@ public class LogEntry extends AbstractTemporalModel {
 		return editedProperties;
 	}
 
-	public void setEditedProperties(List<LogEntryEditedProperty> editedProperties) {
+	public void setEditedProperties(
+			List<LogEntryEditedProperty> editedProperties) {
 		this.editedProperties = editedProperties;
 	}
 
