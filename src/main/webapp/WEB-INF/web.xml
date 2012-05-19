@@ -25,6 +25,10 @@
 		<location>/500</location>
 	</error-page>
 	<error-page>
+		<error-code>403</error-code>
+		<location>/403</location>
+	</error-page>
+	<error-page>
 		<exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
 		<location>/404</location>
 	</error-page>
@@ -39,7 +43,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Доступ только для авторизованных пользователей</web-resource-name>
-			<url-pattern>/cabinet/*</url-pattern>
+			<url-pattern>/scms/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>ADMIN</role-name>
@@ -110,4 +114,8 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
+	<context-param>
+		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+		<param-value>/WEB-INF/scms.taglib.xml</param-value>
+	</context-param>
 </web-app>

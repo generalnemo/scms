@@ -13,8 +13,8 @@ import javax.persistence.TypedQuery;
 import org.scms.model.entity.AbstractIdentityModel;
 import org.scms.service.filter.AbstractSearchFilter;
 
-public abstract class ObjectService<F extends AbstractSearchFilter, T extends AbstractIdentityModel>
-		extends CRUDService<T> {
+public abstract class AbstractObjectService<F extends AbstractSearchFilter, T extends AbstractIdentityModel>
+		extends AbstractCRUDService<T> {
 
 	public abstract String completeTypedQueryString(F filter, Map<String, Object> parametersMap);
 
