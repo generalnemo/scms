@@ -1,19 +1,23 @@
 package org.scms.service;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 import org.scms.model.entity.CItem;
-import org.scms.view.filter.search.CItemSearchFilter;
+import org.scms.service.filter.CItemSearchFilter;
 
 @Stateless
-public class CItemService extends SearchFilterService<CItem> {
+public class CItemService extends ObjectService<CItemSearchFilter, CItem> {
 
 	@Override
-	public List<CItem> findByFilter(CItemSearchFilter filter) {
-		// TODO Auto-generated method stub
+	public String completeQueryString(CItemSearchFilter filter) {
 		return null;
+	}
+
+	@Override
+	public void initQueryParameters(TypedQuery<CItem> query, CItemSearchFilter filter) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

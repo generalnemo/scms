@@ -7,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -23,10 +20,6 @@ import org.scms.enumerate.citem.CItemState;
 public class CItemRevision extends AbstractTemporalModel {
 
 	private static final long serialVersionUID = 7061569905854571059L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
 
 	@Column(name = "revision_name", length = 1024, nullable = false)
 	private String name;
@@ -46,7 +39,7 @@ public class CItemRevision extends AbstractTemporalModel {
 	private CItemState state = CItemState.CREATED;
 
 	@Column(name = "citem_readiness")
-	private double readiness;
+	private Double readiness;
 
 	@Lob
 	@Basic
@@ -59,28 +52,21 @@ public class CItemRevision extends AbstractTemporalModel {
 	@Column(name = "file_name")
 	private String fileName;
 
+	@Column(name = "is_baseline")
+	private boolean baseLine = false;
+	
+	@Column(name = "is_current_revision")
+	private boolean currentRevision = false;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "contexCItemRevision", fetch = FetchType.LAZY)
 	private List<CItemsRelationship> relationships;
 
-	public double getReadiness() {
+	public Double getReadiness() {
 		return readiness;
 	}
 
-	public void setReadiness(double readiness) {
+	public void setReadiness(Double readiness) {
 		this.readiness = readiness;
-	}
-
-	@Override
-	public Object getPrimaryKey() {
-		return id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -153,6 +139,22 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	public void setRelationships(List<CItemsRelationship> relationships) {
 		this.relationships = relationships;
+	}
+
+	public boolean isBaseLine() {
+		return baseLine;
+	}
+
+	public void setBaseLine(boolean baseLine) {
+		this.baseLine = baseLine;
+	}
+
+	public boolean isCurrentRevision() {
+		return currentRevision;
+	}
+
+	public void setCurrentRevision(boolean currentRevision) {
+		this.currentRevision = currentRevision;
 	}
 
 }

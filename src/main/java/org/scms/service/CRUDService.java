@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.jboss.solder.logging.Logger;
 import org.scms.model.entity.AbstractTemporalModel;
 import org.scms.model.exception.EntityAlreadyExistsException;
 import org.scms.util.ReflectionUtil;
@@ -18,6 +19,9 @@ public abstract class CRUDService<T extends AbstractTemporalModel> {
 
 	@Inject
 	protected EntityManager em;
+
+	@Inject
+	protected Logger logger;
 
 	@SuppressWarnings("unchecked")
 	public Class<T> getEntityClass() {
@@ -46,10 +50,12 @@ public abstract class CRUDService<T extends AbstractTemporalModel> {
 			em.persist(em.merge(object));
 		} catch (PersistenceException e) {
 			if (e.getMessage().contains("ConstraintViolationException")) {
+				logger.error(e.getMessage(), e);
 				throw new EntityAlreadyExistsException(e.getMessage(), e);
 			}
 			throw e;
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			throw new EntityAlreadyExistsException(e.getMessage(), e);
 		}
 	}

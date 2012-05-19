@@ -7,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,17 +22,13 @@ public class CItem extends AbstractTemporalModel {
 
 	private static final long serialVersionUID = 4709031887312265590L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
 	@Column(name = "citem_name", nullable = false)
 	private String name;
 
 	@Column(name = "citem_description", length = 2048)
 	private String description;
 
-	@Column(name = "citem_type", nullable = false)
+	@Column(name = "citem_type", nullable = false, updatable = false)
 	private CItemType type;
 
 	@ManyToOne
@@ -72,18 +65,8 @@ public class CItem extends AbstractTemporalModel {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
 	private List<CItemRevision> revisions;
 
-	@Override
-	public Object getPrimaryKey() {
-		return id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
+	private List<LogEntry> logEntries;
 
 	public String getName() {
 		return name;
@@ -179,6 +162,14 @@ public class CItem extends AbstractTemporalModel {
 
 	public void setRevisions(List<CItemRevision> revisions) {
 		this.revisions = revisions;
+	}
+
+	public List<LogEntry> getLogEntries() {
+		return logEntries;
+	}
+
+	public void setLogEntries(List<LogEntry> logEntries) {
+		this.logEntries = logEntries;
 	}
 
 }

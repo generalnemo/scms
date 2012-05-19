@@ -1,11 +1,11 @@
-package org.scms.view.filter.search;
+package org.scms.service.filter;
 
 import org.scms.enumerate.citem.CItemType;
 
 public class CItemSearchFilter {
-	
+
 	private String userName;
-	
+
 	private CItemType type;
 
 	public String getUserName() {

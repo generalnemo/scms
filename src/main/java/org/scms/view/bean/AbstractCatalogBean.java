@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.scms.model.entity.AbstractTemporalModel;
 import org.scms.service.CItemService;
 import org.scms.service.UserService;
-import org.scms.view.filter.search.CItemSearchFilter;
+import org.scms.service.filter.CItemSearchFilter;
 
 public abstract class AbstractCatalogBean<T extends AbstractTemporalModel>
 		implements Serializable {

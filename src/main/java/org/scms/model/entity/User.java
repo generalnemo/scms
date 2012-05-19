@@ -15,18 +15,23 @@ import javax.persistence.Table;
 
 import org.scms.enumerate.UserGroup;
 
+
 @Entity
 @Table(name = "t_user")
 @SecondaryTable(name = "user_group", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_name"))
 @NamedQueries({
 		@NamedQuery(name = User.FIND_ALL, query = "SELECT u from User u"),
-		@NamedQuery(name = User.FIND_BY_GROUP, query = "SELECT u from User u WHERE group = :group") })
+		@NamedQuery(name = User.FIND_BY_GROUP, query = "SELECT u from User u WHERE group = :group"),
+		@NamedQuery(name = User.FIND_BY_PART_NAME_AND_GROUP, query = "SELECT u from User u WHERE group = :group and (lastName LIKE :lastName or firstName LIKE :firstName or middleName LIKE :middleName)") })
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -8059489547682362958L;
 
 	public static final String FIND_ALL = "User.findAllUsers";
+
 	public static final String FIND_BY_GROUP = "User.findByGroup";
+
+	public static final String FIND_BY_PART_NAME_AND_GROUP = "User.findByPartNameAndGroup";
 
 	@Id
 	@Column(name = "user_name")

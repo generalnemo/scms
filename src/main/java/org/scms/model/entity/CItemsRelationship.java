@@ -2,9 +2,6 @@ package org.scms.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,37 +14,21 @@ public class CItemsRelationship extends AbstractTemporalModel {
 
 	private static final long serialVersionUID = -4408260984086348939L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
 	@ManyToOne
-	@JoinColumn(name = "context_citem_revision_id")
+	@JoinColumn(name = "context_citem_revision_id", nullable = false)
 	private CItemRevision contexCItemRevision;
 
 	@ManyToOne
-	@JoinColumn(name = "citem_revision_from_id")
+	@JoinColumn(name = "citem_revision_from_id", nullable = false)
 	private CItemRevision cItemRevisionFrom;
 
-	@Column(name = "relationship_type")
+	@Column(name = "relationship_type", nullable = false)
 	private CItemRelationshipType type;
 
 	@ManyToOne
-	@JoinColumn(name = "citem_revision_to_id")
+	@JoinColumn(name = "citem_revision_to_id", nullable = false)
 	private CItemRevision cItemRevisionTo;
 
-	@Override
-	public Object getPrimaryKey() {
-		return id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public CItemRevision getContexCItemRevision() {
 		return contexCItemRevision;

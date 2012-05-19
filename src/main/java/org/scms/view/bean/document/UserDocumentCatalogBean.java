@@ -1,4 +1,4 @@
-package org.scms.view.bean;
+package org.scms.view.bean.document;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
@@ -6,7 +6,8 @@ import javax.inject.Named;
 
 import org.scms.enumerate.citem.CItemType;
 import org.scms.model.entity.CItem;
-import org.scms.view.filter.search.CItemSearchFilter;
+import org.scms.service.filter.CItemSearchFilter;
+import org.scms.view.bean.AbstractCatalogBean;
 
 @Named("userDocumentCatalog")
 @ViewScoped
@@ -18,7 +19,7 @@ public class UserDocumentCatalogBean extends AbstractCatalogBean<CItem> {
 	protected void init() {
 		filter = new CItemSearchFilter();
 		filter.setType(CItemType.DOCUMENT);
-		objects = cItemService.findByFilter(filter);
+		objects = cItemService.execute(filter);
 	}
 
 }

@@ -37,17 +37,18 @@ public class UserBean implements Serializable {
 	public String logout() throws ServletException {
 		getRequest().logout();
 		setCurrentUser(null);
-		getResponse().setHeader("Cache-Control",
-				"private, no-store, no-cache, must-revalidate");
+		try {
+            HttpServletResponse response = ((HttpServletResponse) external.getResponse());
+            response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+            external.invalidateSession();
+        } catch (Exception e) {
+
+        }
 		return "/index.xhtml?faces-redirect=true";
 	}
 
 	private HttpServletRequest getRequest() {
 		return (HttpServletRequest) external.getRequest();
-	}
-
-	private HttpServletResponse getResponse() {
-		return (HttpServletResponse) external.getResponse();
 	}
 
 	public User getCurrentUser() {
