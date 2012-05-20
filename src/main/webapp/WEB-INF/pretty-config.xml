@@ -14,6 +14,11 @@
     <view-id value="/cabinet/documents/add.jsf" />
     <action>#{userDocument.pageLoad}</action>
   </url-mapping>
+  <url-mapping id="editDocument" parentId="documentsCatalog">
+    <pattern value="/#{userDocument.objectId}/edit" />
+    <view-id value="/cabinet/documents/edit.jsf" />
+    <action>#{userDocument.pageLoad}</action>
+  </url-mapping>
   <url-mapping id="404">
     <pattern value="/404" />
     <view-id value="/404.jsf" />

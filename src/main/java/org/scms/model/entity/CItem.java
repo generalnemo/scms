@@ -26,7 +26,7 @@ public class CItem extends AbstractTemporalModel {
 	@Column(name = "citem_name", nullable = false)
 	private String name;
 
-	@Column(name = "citem_description", length = 2048)
+	@Column(name = "citem_description", length = 2048, nullable = false)
 	private String description;
 
 	@Column(name = "citem_type", nullable = false, updatable = false)
@@ -60,7 +60,7 @@ public class CItem extends AbstractTemporalModel {
 	private Date endProcessDate;
 
 	@ManyToOne
-	@JoinColumn(name = "citem_difficulty", nullable = false)
+	@JoinColumn(name = "citem_difficulty")
 	private DifficultyScaleCoeff difficulty;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
