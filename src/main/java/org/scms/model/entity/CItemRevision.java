@@ -21,10 +21,10 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	private static final long serialVersionUID = 7061569905854571059L;
 
-	@Column(name = "revision_name", length = 1024, nullable = false)
+	@Column(name = "revision_name", length = 1024)
 	private String name;
 
-	@Column(name = "revision_description", length = 2048, nullable = false)
+	@Column(name = "revision_description", length = 2048)
 	private String description;
 
 	@ManyToOne
@@ -35,11 +35,11 @@ public class CItemRevision extends AbstractTemporalModel {
 	@JoinColumn(name = "citem_prev_revision_id")
 	private CItemRevision prevRevision;
 
-	@Column(name = "citem_state")
+	@Column(name = "citem_state", nullable = false)
 	private CItemState state = CItemState.CREATED;
 
 	@Column(name = "citem_readiness")
-	private Double readiness;
+	private Double readiness = 0.0;
 
 	@Lob
 	@Basic
@@ -54,7 +54,7 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	@Column(name = "is_baseline")
 	private boolean baseLine = false;
-	
+
 	@Column(name = "is_current_revision")
 	private boolean currentRevision = false;
 

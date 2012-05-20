@@ -18,7 +18,9 @@
 					<f:facet name="header">
 						<h:outputText value="Название" />
 					</f:facet>
-					<h:outputText value="#{document.name}" />
+					<h:outputLink value="/scms/documents/#{document.id}/edit">
+						<h:outputText value="#{document.name}" />
+					</h:outputLink>
 				</p:column>
 				<p:column sortBy="#{document.createdBy.fullName}">
 					<f:facet name="header">

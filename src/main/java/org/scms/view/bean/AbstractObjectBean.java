@@ -1,10 +1,12 @@
 package org.scms.view.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -41,15 +43,18 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 	protected FacesContext fContext;
 
 	protected List<User> userList;
-	
+
 	protected String objectId;
 
 	protected T object;
+
+	protected Date currentDate = new Date();
 
 	protected abstract void pageLoad();
 
 	protected abstract AbstractCRUDService<T> getService();
 
+	@PostConstruct
 	protected void init() {
 		userList = userService.findAllUsers();
 	}
@@ -60,7 +65,7 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 			fContext.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO,
 					"Информация добавлена в реестр", null));
-			return getProperty(PRETTY_VIEW);
+			return getProperty(PRETTY_CATALOG);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			for (Throwable a = e.getCause(); a != null; a = a.getCause()) {
@@ -82,7 +87,7 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 	public String removeObject() {
 		try {
 			getService().remove(object);
-			return getProperty(PRETTY_CATALOG);
+			return getProperty(PRETTY_EDIT);
 		} catch (Exception e) {
 			fContext.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Ошибка при удалении", null));
@@ -129,5 +134,13 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	public void setObjectId(String objectId) {
 		this.objectId = objectId;
+	}
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public Date getCurrentDate() {
+		return currentDate;
 	}
 }

@@ -23,5 +23,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 		addProperty(PRETTY_EDIT, "pretty:editDocument");
 		addProperty(PRETTY_VIEW, "pretty:viewDocument");
 	}
+	
+	
 
 }

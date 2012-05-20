@@ -10,10 +10,11 @@
   <ui:composition template="/templates/main.xhtml">
     <ui:define name="windowTitle">Создание документа</ui:define>
     <ui:define name="content">
-      <h1>Создать документ</h1>
+      <h1>Создание документа</h1>
       <h:form id="form">
         <p:messages globalOnly="true" />
         <scms:editDocument />
+        <p:commandButton value="Создать документ" action="#{userDocument.addObject}" ajax="false"/>
       </h:form>
     </ui:define>
   </ui:composition>
