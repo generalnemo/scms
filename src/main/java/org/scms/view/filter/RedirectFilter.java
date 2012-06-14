@@ -16,36 +16,32 @@ import org.scms.view.bean.AuthentificationBean;
 
 public class RedirectFilter implements Filter {
 
-	private FilterConfig config = null;
+	private FilterConfig filterConfig;
 
-	public void init(FilterConfig filterConfig) {
-		this.config = filterConfig;
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		this.filterConfig = filterConfig;
 	}
 
+	@Override
 	public void doFilter(ServletRequest servletRequest,
 			ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpSession session = request.getSession();
-		/*if (request.getRequestedSessionId() != null
-				&& !request.isRequestedSessionIdValid()) {
-			if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-				filterChain.doFilter(request, response);
-				return;
-			}
-			response.sendRedirect(config.getInitParameter("login.url"));
+		if (session.getAttribute(AuthentificationBean.AUTH_KEY) != null
+				&& request.getRequestURI().equals(
+						filterConfig.getInitParameter("login.url"))) {
+			response.sendRedirect(filterConfig.getInitParameter("init.url"));
 			return;
 		}
-		if (session.getAttribute(AuthentificationBean.AUTH_KEY) == null) {
-			response.sendRedirect(config.getInitParameter("login.url"));
-		} else {*/
-			filterChain.doFilter(request, response);
-		//}
+		filterChain.doFilter(servletRequest, servletResponse);
 	}
 
+	@Override
 	public void destroy() {
-		config = null;
+		this.filterConfig = null;
 	}
 
 }

@@ -72,10 +72,10 @@
 
 /*--------------------*/
 #login table tbody tr td input {
-  background: #f1f1f1 url("#{resource['img:login-sprite.png']}"") no-repeat;
+  background: #f1f1f1 url("#{resource['img:login-sprite.png']}") no-repeat;
   padding: 15px 15px 15px 30px;
   margin: 0 0 10px 0;
-  width: 353px; /* 353 + 2 + 45 = 400 */
+  width: 253px; /* 353 + 2 + 45 = 400 */
   border: 1px solid #ccc;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -85,11 +85,11 @@
   box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
 }
 
-#login table tbody tr td .username {
+#login table tbody tr td input .username {
   background-position: 5px -2px !important;
 }
 
-#login table tbody tr td .password {
+#login table tbody tr td input .password {
   background-position: 5px -52px !important;
 }
 
@@ -151,6 +151,6 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
 }
 
-#login table tbody tr td .login-button::-moz-focus-inner {
+#login table tbody tr td .login-button:-moz-focus-inner {
   border: none;
 }

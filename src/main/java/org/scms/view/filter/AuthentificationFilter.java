@@ -32,7 +32,6 @@ public class AuthentificationFilter implements Filter {
 				&& !request.isRequestedSessionIdValid()) {
 			if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 				filterChain.doFilter(request, response);
-				return;
 			} else {
 				response.sendRedirect(config.getInitParameter("login.url")+"?expired=true");
 			}

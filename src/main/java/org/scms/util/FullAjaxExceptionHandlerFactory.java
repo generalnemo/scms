@@ -5,20 +5,15 @@ import javax.faces.context.ExceptionHandlerFactory;
 
 public class FullAjaxExceptionHandlerFactory extends ExceptionHandlerFactory {
 
-	private ExceptionHandlerFactory wrapped;
+	private ExceptionHandlerFactory base;
 
-	public FullAjaxExceptionHandlerFactory(ExceptionHandlerFactory wrapped) {
-		this.wrapped = wrapped;
+	public FullAjaxExceptionHandlerFactory(ExceptionHandlerFactory base) {
+		this.base = base;
 	}
 
 	@Override
 	public ExceptionHandler getExceptionHandler() {
-		return new FullAjaxExceptionHandler(wrapped.getExceptionHandler());
-	}
-
-	@Override
-	public ExceptionHandlerFactory getWrapped() {
-		return wrapped;
+		return new FullAjaxExceptionHandler(base.getExceptionHandler());
 	}
 
 }
