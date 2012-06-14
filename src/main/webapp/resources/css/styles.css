@@ -49,6 +49,13 @@ div#footer { position: absolute; width: 100%; bottom: 5px; }
 .edit-object table td .hint { color: red; font-style: italic; }
 .edit-object .buttons { text-align: center; }
 .edit-object table.view-table tr td { border-bottom: 1px dotted black;}
+.simple-file .fileupload-content { border: 0; background: transparent; }
+.simple-file .fileupload-content table.files tr.ui-state-error { border: 0; background: none; color: #333;  }
+.simple-file .fileupload-content table.files tr.ui-state-error td.error { padding: 0; color: #B94A48; }
+.simple-file .fileupload-buttonbar { border: none; background: none; padding: 0; }
+.simple-file .fileupload-buttonbar .ui-button { border: 0; }
+.simple-file .fileupload-buttonbar .ui-button-icon-left { display: none; }
+.simple-file .fileupload-buttonbar .ui-button-text { padding: 4px 10px; font-size: 11px; }
 
 /* Просмотр */
 .edit-object table.view-media-list { margin: 0; }

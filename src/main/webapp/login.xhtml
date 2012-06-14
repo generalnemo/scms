@@ -3,30 +3,40 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <f:view xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:composite="http://java.sun.com/jsf/composite"
-  xmlns:c="http://java.sun.com/jsp/jstl/core"
-  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-  xmlns:p="http://primefaces.org/ui">
-  <ui:composition template="templates/main.xhtml">
-    <ui:define name="css">
-      <h:outputStylesheet library="css" name="login.css" />
-    </ui:define>
-    <ui:define name="content">
-      <p:messages />
-      <div class="ui-messages ui-widget" style="width: 450px; margin: 0 auto;">
-        <div class="ui-messages-error ui-corner-all">
-          <span class="ui-messages-error-icon"/>
-          <ul>
-            <li>
-              <span class="ui-messages-error-summary">Для работы с системой необходимо авторизоваться</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <ui:include src="/templates/login.xhtml"/>
-    </ui:define>
-  </ui:composition>
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:composition template="templates/main.xhtml">
+		<ui:define name="css">
+			<h:outputStylesheet library="css" name="login.css" />
+		</ui:define>
+		<ui:define name="content">
+			<p:messages />
+			<ui:fragment rendered="#{param['expired']}">
+				expired
+			</ui:fragment>
+			<h:form id="login">
+				<h1>Войти</h1>
+				<table>
+					<tr>
+						<td>Имя пользователя:</td>
+						<td><p:inputText value="#{auth.login}" styleClass="username"/></td>
+					</tr>
+					<tr>
+						<td>Пароль:</td>
+						<td><p:password value="#{auth.password}" styleClass="password"/></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p:commandButton action="#{auth.loginAction}" value="Войти" ajax="false" styleClass="login-button"/>
+						</td>
+					</tr>
+				</table>
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </f:view>
