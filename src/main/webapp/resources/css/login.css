@@ -64,18 +64,18 @@
 }
 
 /*--------------------*/
-#login fieldset {
+#login table tbody tr {
   border: 0;
   padding: 0;
   margin: 0;
 }
 
 /*--------------------*/
-#login #inputs input {
-  background: #f1f1f1 url(http://www.red-team-design.com/wp-content/uploads/2011/09/login-sprite.png) no-repeat;
+#login table tbody tr td input {
+  background: #f1f1f1 url("#{resource['img:login-sprite.png']}") no-repeat;
   padding: 15px 15px 15px 30px;
   margin: 0 0 10px 0;
-  width: 353px; /* 353 + 2 + 45 = 400 */
+  width: 253px; /* 353 + 2 + 45 = 400 */
   border: 1px solid #ccc;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -85,15 +85,15 @@
   box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
 }
 
-#login #username {
+#login table tbody tr td input .username {
   background-position: 5px -2px !important;
 }
 
-#login #password {
+#login table tbody tr td input .password {
   background-position: 5px -52px !important;
 }
 
-#login #inputs input:focus {
+#login table tbody tr td input:focus {
   background-color: #fff;
   border-color: #e8c291;
   outline: none;
@@ -103,11 +103,11 @@
 }
 
 /*--------------------*/
-#login #actions {
+#login .login-button {
   margin: 25px 0 0 0;
 }
 
-#login #submit {
+#login table tbody tr td .login-button {
   background-color: #ffb94b;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f), to(#ffb94b) );
   background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
@@ -134,7 +134,7 @@
   color: #8f5a0a;
 }
 
-#login #submit:hover, #login #submit:focus {
+#login table tbody tr td .login-button:hover, #login table tr td .login-button:focus {
   background-color: #fddb6f;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b), to(#fddb6f) );
   background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
@@ -144,13 +144,13 @@
   background-image: linear-gradient(top, #ffb94b, #fddb6f);
 }
 
-#login #submit:active {
+#login table tbody tr td .login-button:active {
   outline: none;
   -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
   -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
 }
 
-#login #submit::-moz-focus-inner {
+#login table tbody tr td .login-button:-moz-focus-inner {
   border: none;
 }

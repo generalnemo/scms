@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	version="3.0" id="scms">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" id="scms">
 	<display-name>scms</display-name>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -13,9 +13,21 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<session-timeout>1</session-timeout>
+	</session-config>
 	<welcome-file-list>
-		<welcome-file>index.jsf</welcome-file>
+		<welcome-file>/login</welcome-file>
+		<welcome-file>/index</welcome-file>
 	</welcome-file-list>
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/login.jsf</location>
+	</error-page>
 	<error-page>
 		<error-code>404</error-code>
 		<location>/404</location>
@@ -40,42 +52,26 @@
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
 	</context-param>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Доступ только для авторизованных пользователей</web-resource-name>
-			<url-pattern>/scms/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>ADMIN</role-name>
-			<role-name>MANAGER</role-name>
-			<role-name>DEVELOPER</role-name>
-			<role-name>TESTER</role-name>
-			<role-name>CONTROLLER</role-name>
-		</auth-constraint>
-	</security-constraint>
-	<login-config>
-		<auth-method>FORM</auth-method>
-		<realm-name>SCMSRealm</realm-name>
-		<form-login-config>
-			<form-login-page>/login.jsf</form-login-page>
-			<form-error-page>/noauth.jsf</form-error-page>
-		</form-login-config>
-	</login-config>
-	<security-role>
-		<role-name>ADMIN</role-name>
-	</security-role>
-	<security-role>
-		<role-name>DEVELOPER</role-name>
-	</security-role>
-	<security-role>
-		<role-name>MANAGER</role-name>
-	</security-role>
-	<security-role>
-		<role-name>TESTER</role-name>
-	</security-role>
-	<security-role>
-		<role-name>CONTROLLER</role-name>
-	</security-role>
+	<filter>
+		<filter-name>AuthentificationFilter</filter-name>
+		<filter-class>org.scms.view.filter.AuthentificationFilter</filter-class>
+		<init-param>
+			<param-name>login.url</param-name>
+			<param-value>/login</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>RedirectFilter</filter-name>
+		<filter-class>org.scms.view.filter.RedirectFilter</filter-class>
+		<init-param>
+			<param-name>login.url</param-name>
+			<param-value>/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>init.url</param-name>
+			<param-value>/</param-value>
+		</init-param>
+	</filter>
 	<filter>
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>org.scms.view.filter.EncodingFilter</filter-class>
@@ -84,6 +80,17 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
+	<filter-mapping>
+		<filter-name>AuthentificationFilter</filter-name>
+		<url-pattern>/scms/*</url-pattern>
+		<url-pattern>/resources/*</url-pattern>
+		<url-pattern>/templates/*</url-pattern>
+		<url-pattern>/</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>RedirectFilter</filter-name>
+		<url-pattern>/login</url-pattern>
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>EncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -117,5 +124,9 @@
 	<context-param>
 		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
 		<param-value>/WEB-INF/scms.taglib.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
+		<param-value>123456</param-value>
 	</context-param>
 </web-app>

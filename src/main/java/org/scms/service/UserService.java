@@ -55,6 +55,20 @@ public class UserService implements Serializable {
 		return query.getResultList();
 	}
 
+	public User findUserByLoginAndPassword(String login, String password) {
+		try {
+			TypedQuery<User> query = em
+					.createQuery(
+							"SELECT u FROM User u WHERE u.userLoginName = :login AND u.password = :passwd",
+							User.class);
+			query.setParameter("login", login);
+			query.setParameter("passwd", password);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public List<User> getUsers() {
 		return users;
 	}

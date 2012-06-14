@@ -40,6 +40,10 @@
     <pattern value="/login" />
     <view-id value="/login.jsf" />
   </url-mapping>
+   <url-mapping id="expired">
+    <pattern value="/login?expired=true" />
+    <view-id value="/login.jsf?expired=true" />
+  </url-mapping>
   <url-mapping id="noauth">
     <pattern value="/noauth" />
     <view-id value="/noauth.jsf" />

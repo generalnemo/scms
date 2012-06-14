@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<td><h:outputText value="Автор:"/></td>
-				<td><h:outputText value="#{userDocument.object.createdBy.fullName}"/></td>
+				<td><h:outputText value="#{user.currentUser.fullName}"/></td>
 			</tr>
 			<tr>
 				<td><h:outputText value="Распорядитель ресурсов:"/></td>
@@ -85,12 +85,14 @@
         		<td><p:message for="endProcessDate" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Файл документа:"/></td>
+				<td valign="top"><h:outputText value="Файл документа:"/></td>
 				<td>
+					
 					<p:fileUpload id="inputFile" fileUploadListener="#{userDocument.documentUploadListener}"
-                		multiple="false" label="Добавить файл" auto="true" 
+                		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
                 		mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this"/>
                 </td>
+                <td><p:message for="inputFile"/> </td>
 			</tr>
 		</tbody>
 	</table>
