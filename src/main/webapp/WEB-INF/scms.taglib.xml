@@ -6,4 +6,8 @@
   	<tag-name>editDocument</tag-name>
   	<source>tags/scms/document/editDocument.xhtml</source>
   </tag>
+  <tag>
+  	<tag-name>editTask</tag-name>
+  	<source>tags/scms/task/editTask.xhtml</source>
+  </tag>
 </facelet-taglib>

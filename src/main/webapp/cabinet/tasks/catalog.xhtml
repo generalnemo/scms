@@ -9,54 +9,54 @@
   xmlns:scms="http://scms.cyber.mephi.ru/facelets">
   <ui:composition template="/templates/main.xhtml">
     <ui:define name="content">
-      <h1>Поиск документов</h1>
+      <h1>Поиск задач</h1>
       <h:form id="form">
-      	<h:link value="Создать документ" outcome="/cabinet/documents/add" />
-      	<p:dataTable value="#{userDocumentCatalog.objects}" var="document" paginator="true"
-                         rows="10" emptyMessage="Документов не найдено" paginatorPosition="bottom">
-				<p:column sortBy="#{document.name}">
+      	<h:link value="Создать задачу" outcome="/cabinet/tasks/add" />
+      	<p:dataTable value="#{userTaskCatalog.objects}" var="task" paginator="true"
+                         rows="10" emptyMessage="Задач не найдено" paginatorPosition="bottom">
+				<p:column sortBy="#{task.name}">
 					<f:facet name="header">
 						<h:outputText value="Название" />
 					</f:facet>
-					<h:outputLink value="/scms/documents/#{document.id}/edit">
-						<h:outputText value="#{document.name}" />
+					<h:outputLink value="/scms/tasks/#{task.id}/edit">
+						<h:outputText value="#{task.name}" />
 					</h:outputLink>
 				</p:column>
-				<p:column sortBy="#{document.createdBy.fullName}">
+				<p:column sortBy="#{task.createdBy.fullName}">
 					<f:facet name="header">
 						<h:outputText value="Автор" />
 					</f:facet>
-					<h:outputText value="#{document.createdBy.fullName}" />
+					<h:outputText value="#{task.createdBy.fullName}" />
 				</p:column>
-				<p:column sortBy="#{document.curator.fullName}">
+				<p:column sortBy="#{task.curator.fullName}">
 					<f:facet name="header">
 						<h:outputText value="Куратор" />
 					</f:facet>
-					<h:outputText value="#{document.curator.fullName}" />
+					<h:outputText value="#{task.curator.fullName}" />
 				</p:column>
-				<p:column sortBy="#{document.performer.fullName}">
+				<p:column sortBy="#{task.performer.fullName}">
 					<f:facet name="header">
 						<h:outputText value="Исполнитель" />
 					</f:facet>
-					<h:outputText value="#{document.performer.fullName}" />
+					<h:outputText value="#{task.performer.fullName}" />
 				</p:column>
-				<p:column sortBy="#{document.resourceManager.fullName}">
+				<p:column sortBy="#{task.resourceManager.fullName}">
 					<f:facet name="header">
 						<h:outputText value="Владелец ресурсов" />
 					</f:facet>
-					<h:outputText value="#{document.resourceManager.fullName}" />
+					<h:outputText value="#{task.resourceManager.fullName}" />
 				</p:column>
-				<p:column sortBy="#{document.controller.fullName}">
+				<p:column sortBy="#{task.controller.fullName}">
 					<f:facet name="header">
 						<h:outputText value="Контролер" />
 					</f:facet>
-					<h:outputText value="#{document.controller.fullName}" />
+					<h:outputText value="#{task.controller.fullName}" />
 				</p:column>
-				<p:column sortBy="#{document.createdAt}">
+				<p:column sortBy="#{task.createdAt}">
 					<f:facet name="header">
 						<h:outputText value="Дата создания" />
 					</f:facet>
-					<h:outputText value="#{document.formattedCreatedAtDate}" />
+					<h:outputText value="#{task.formattedCreatedAtDate}" />
 				</p:column>
 			</p:dataTable>        
       </h:form>

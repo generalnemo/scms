@@ -5,6 +5,11 @@
     <pattern value="/scms" />
     <view-id value="/index.jsf" />
   </url-mapping>
+  <url-mapping id="index">
+    <pattern value="/" />
+    <view-id value="/index.jsf" />
+  </url-mapping>
+  <!-- Документы -->
   <url-mapping id="documentsCatalog">
     <pattern value="/scms/documents" />
     <view-id value="/cabinet/documents/catalog.jsf" />
@@ -18,6 +23,21 @@
     <pattern value="/#{userDocument.objectId}/edit" />
     <view-id value="/cabinet/documents/edit.jsf" />
     <action>#{userDocument.pageLoad}</action>
+  </url-mapping>
+  <!-- Задачи -->
+  <url-mapping id="tasksCatalog">
+    <pattern value="/scms/tasks" />
+    <view-id value="/cabinet/tasks/catalog.jsf" />
+  </url-mapping>
+  <url-mapping id="addTask" parentId="tasksCatalog">
+    <pattern value="/add" />
+    <view-id value="/cabinet/tasks/add.jsf" />
+    <action>#{userTask.pageLoad}</action>
+  </url-mapping>
+  <url-mapping id="editTask" parentId="tasksCatalog">
+    <pattern value="/#{userTask.objectId}/edit" />
+    <view-id value="/cabinet/tasks/edit.jsf" />
+    <action>#{userTask.pageLoad}</action>
   </url-mapping>
   <url-mapping id="404">
     <pattern value="/404" />

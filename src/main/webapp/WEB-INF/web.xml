@@ -17,12 +17,9 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	<session-config>
-		<session-timeout>1</session-timeout>
-	</session-config>
 	<welcome-file-list>
 		<welcome-file>/login</welcome-file>
-		<welcome-file>/index</welcome-file>
+		<welcome-file>/</welcome-file>
 	</welcome-file-list>
 	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
@@ -52,6 +49,10 @@
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
 	</context-param>
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
 	<filter>
 		<filter-name>AuthentificationFilter</filter-name>
 		<filter-class>org.scms.view.filter.AuthentificationFilter</filter-class>
@@ -69,7 +70,7 @@
 		</init-param>
 		<init-param>
 			<param-name>init.url</param-name>
-			<param-value>/</param-value>
+			<param-value>/scms</param-value>
 		</init-param>
 	</filter>
 	<filter>

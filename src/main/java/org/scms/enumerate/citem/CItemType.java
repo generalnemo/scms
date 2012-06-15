@@ -2,7 +2,7 @@ package org.scms.enumerate.citem;
 
 public enum CItemType {
 
-	WORK("Работа"), DOCUMENT("Документ"), CHANGE_REQUEST("Запрос на изменение"), PROJECT(
+	TASK("Работа"), DOCUMENT("Документ"), CHANGE_REQUEST("Запрос на изменение"), PROJECT(
 			"Проект");
 
 	private String label;

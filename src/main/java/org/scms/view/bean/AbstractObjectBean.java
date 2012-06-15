@@ -41,6 +41,9 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	@Inject
 	protected FacesContext fContext;
+	
+	@Inject
+	protected UserBean userBean;
 
 	protected List<User> userList;
 
