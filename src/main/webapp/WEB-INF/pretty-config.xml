@@ -61,8 +61,8 @@
     <view-id value="/login.jsf" />
   </url-mapping>
    <url-mapping id="expired">
-    <pattern value="/login?expired=true" />
-    <view-id value="/login.jsf?expired=true" />
+    <pattern value="/expired" />
+    <view-id value="/expired.jsf" />
   </url-mapping>
   <url-mapping id="noauth">
     <pattern value="/noauth" />

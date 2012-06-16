@@ -27,17 +27,19 @@ public class AuthentificationFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		HttpSession session = request.getSession();
 		if (request.getRequestedSessionId() != null
 				&& !request.isRequestedSessionIdValid()) {
 			if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 				filterChain.doFilter(request, response);
 			} else {
-				response.sendRedirect(config.getInitParameter("login.url")+"?expired=true");
+				response.sendRedirect(config.getInitParameter("expired.url"));
+				
 			}
 			return;
 		}
-		if (session.getAttribute(AuthentificationBean.AUTH_KEY) == null) {
+		HttpSession session = request.getSession();
+		if (session == null
+				|| session.getAttribute(AuthentificationBean.AUTH_KEY) == null) {
 			response.sendRedirect(config.getInitParameter("login.url"));
 		} else {
 			filterChain.doFilter(request, response);

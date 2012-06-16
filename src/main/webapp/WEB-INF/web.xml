@@ -27,23 +27,23 @@
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404</location>
+		<location>/404.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/500</location>
+		<location>/500.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>403</error-code>
-		<location>/403</location>
+		<location>/403.jsf</location>
 	</error-page>
 	<error-page>
 		<exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
-		<location>/404</location>
+		<location>/404.jsf</location>
 	</error-page>
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>/error</location>
+		<location>/error.jsf</location>
 	</error-page>
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
@@ -59,6 +59,10 @@
 		<init-param>
 			<param-name>login.url</param-name>
 			<param-value>/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>expired.url</param-name>
+			<param-value>/login?expired=true</param-value>
 		</init-param>
 	</filter>
 	<filter>
@@ -125,9 +129,5 @@
 	<context-param>
 		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
 		<param-value>/WEB-INF/scms.taglib.xml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
-		<param-value>123456</param-value>
 	</context-param>
 </web-app>
