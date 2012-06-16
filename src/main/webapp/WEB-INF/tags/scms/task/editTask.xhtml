@@ -13,7 +13,7 @@
 	<table>
 		<tbody>
 			<tr>
-				<td><h:outputText value="Имя:"/></td>
+				<td><h:outputText value="Название задачи:"/></td>
 				<td><p:inputText id="objectName" value="#{userTask.object.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
 				<td><p:message for="objectName" display="text"/></td>
 			</tr>
@@ -24,9 +24,33 @@
 			</tr>
 			<tr>
 				<td><h:outputText value="Автор:"/></td>
-				<td><h:outputText value="#{user.currentUser.fullName}"/></td>
+				<td><h:outputText value="#{userTask.object.createdBy.fullName}"/></td>
 			</tr>
-			<tr>
+			<ui:fragment rendered="#{userTask.object.id == 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для задачи:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.object.cCategory}" id="objectControlCategory">
+							<f:selectItems value="#{userTask.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
+							<p:ajax update="changeableAttributes" event="change"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectControlCategory" display="text" /></td>
+				</tr>
+			</ui:fragment>
+			<ui:fragment rendered="#{userTask.object.id != 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для задачи:"/></td>
+					<td><h:outputText value="#{userTask.object.cCategory.label} : #{userTask.object.cCategory.description}"/></td>
+				</tr>
+			</ui:fragment>
+		</tbody>
+	</table>
+	<p:outputPanel id="changeableAttributes">
+			<ui:fragment rendered="#{!empty userTask.object.cCategory and (userTask.object.cCategory.cc1 or userTask.object.cCategory.cc2 or userTask.object.cCategory.cc3)}">
+			<table>
+			<tbody>
+				<tr>
 				<td><h:outputText value="Распорядитель ресурсов:"/></td>
 				<td>
 					<p:selectOneMenu value="#{userTask.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
@@ -66,33 +90,26 @@
 				</td>
 				<td><p:message for="objectController" display="text"/></td>
 			</tr>
-			<tr>
-				<td><h:outputText value="Дата начала работы над объектом:"/></td>
-				<td><p:calendar id="startProcessDate" value="#{userTask.object.startProcessDate}" mode="popup"
-                    	readOnlyInputText="true" mindate="#{userTask.currentDate}"> 
-          				<p:ajax event="dateSelect" />
-        			</p:calendar>
-        		</td>
-        		<td><p:message for="startProcessDate" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Дата окончания работы над объектом:"/></td>
-				<td><p:calendar id="endProcessDate" value="#{userTask.object.endProcessDate}" mode="popup"
-                    	readOnlyInputText="true" mindate="#{userTask.currentDate}"> 
-          				<p:ajax event="dateSelect" />
-        			</p:calendar>
-        		</td>
-        		<td><p:message for="endProcessDate" display="text"/></td>
-			</tr>
-			<tr>
-				<td valign="top"><h:outputText value="Файл документа:"/></td>
-				<td>
-					<p:fileUpload id="inputFile" fileUploadListener="#{userTask.documentUploadListener}"
-                		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
-                		mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this"/>
-                </td>
-                <td><p:message for="inputFile"/> </td>
-			</tr>
-		</tbody>
-	</table>
+				<tr>
+					<td><h:outputText value="Дата начала работы над задачей:"/></td>
+					<td><p:calendar id="startProcessDate" value="#{userTask.object.startProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userTask.currentDate}" maxdate="#{userTask.object.endProcessDate}"> 
+          					<p:ajax event="dateSelect" update="endProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="startProcessDate" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Дата окончания работы над задачей:"/></td>
+					<td><p:calendar id="endProcessDate" value="#{userTask.object.endProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userTask.object.startProcessDate}" disabled="#{userTask.object.startProcessDate == null}"> 
+          					<p:ajax event="dateSelect" update="startProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="endProcessDate" display="text"/></td>
+				</tr>
+				</tbody>
+				</table>
+				</ui:fragment>	
+			</p:outputPanel>
 </ui:composition>

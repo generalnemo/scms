@@ -1,11 +1,14 @@
 package org.scms.view.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.scms.enumerate.ControlCategory;
 import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemType;
 import org.scms.model.entity.CItem;
@@ -23,6 +26,8 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 	private static final long serialVersionUID = 7601502105334694505L;
 
 	protected CItemType type;
+
+	protected List<ControlCategory> categories;
 
 	@Inject
 	protected CItemService cItemService;
@@ -64,13 +69,15 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		entry.setCreatedBy(userBean.getCurrentUser());
 		object.getLogEntries().add(entry);
 		object.setCreatedBy(userBean.getCurrentUser());
+		object.setcCategory(categories.get(0));
 	}
 
 	public void documentUploadListener(FileUploadEvent event) {
 		UploadedFile file = event.getFile();
 		if (file != null) {
 			int revisionsCount = object.getRevisions().size();
-			CItemRevision revision = object.getRevisions().get(revisionsCount - 1);
+			CItemRevision revision = object.getRevisions().get(
+					revisionsCount - 1);
 			revision.setData(file.getContents());
 			revision.setContentType(file.getContentType());
 			revision.setFileName(file.getFileName());
@@ -164,6 +171,10 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public List<ControlCategory> getCategories() {
+		return categories;
 	}
 
 }

@@ -13,7 +13,7 @@
 	<table>
 		<tbody>
 			<tr>
-				<td><h:outputText value="Имя:"/></td>
+				<td><h:outputText value="Название документа:"/></td>
 				<td><p:inputText id="objectName" value="#{userDocument.object.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
 				<td><p:message for="objectName" display="text"/></td>
 			</tr>
@@ -24,66 +24,25 @@
 			</tr>
 			<tr>
 				<td><h:outputText value="Автор:"/></td>
-				<td><h:outputText value="#{user.currentUser.fullName}"/></td>
+				<td><h:outputText value="#{userDocument.object.createdBy.fullName}"/></td>
 			</tr>
-			<tr>
-				<td><h:outputText value="Распорядитель ресурсов:"/></td>
-				<td>
-					<p:selectOneMenu value="#{userDocument.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
-						<f:selectItem itemLabel="Выберите пользователя" />
-						<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
-					</p:selectOneMenu>
-				</td>
-				<td><p:message for="objectResourceManager" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Куратор:"/></td>
-				<td>
-					<p:selectOneMenu value="#{userDocument.selectedCurator}" id="objectCurator">
-						<f:selectItem itemLabel="Выберите пользователя" />
-						<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
-					</p:selectOneMenu>
-				</td>
-				<td><p:message for="objectCurator" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Ответственный исполнитель:"/></td>
-				<td>
-					<p:selectOneMenu value="#{userDocument.selectedPerformer}" id="objectPerformer">
-						<f:selectItem itemLabel="Выберите пользователя" />
-						<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
-					</p:selectOneMenu>
-				</td>
-				<td><p:message for="objectPerformer" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Контролер:"/></td>
-				<td>
-					<p:selectOneMenu value="#{userDocument.selectedController}" id="objectController">
-						<f:selectItem itemLabel="Выберите пользователя" />
-						<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
-					</p:selectOneMenu>
-				</td>
-				<td><p:message for="objectController" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Дата начала работы над объектом:"/></td>
-				<td><p:calendar id="startProcessDate" value="#{userDocument.object.startProcessDate}" mode="popup"
-                    	readOnlyInputText="true" mindate="#{userDocument.currentDate}"> 
-          				<p:ajax event="dateSelect" />
-        			</p:calendar>
-        		</td>
-        		<td><p:message for="startProcessDate" display="text"/></td>
-			</tr>
-			<tr>
-				<td><h:outputText value="Дата окончания работы над объектом:"/></td>
-				<td><p:calendar id="endProcessDate" value="#{userDocument.object.endProcessDate}" mode="popup"
-                    	readOnlyInputText="true" mindate="#{userDocument.currentDate}"> 
-          				<p:ajax event="dateSelect" />
-        			</p:calendar>
-        		</td>
-        		<td><p:message for="endProcessDate" display="text"/></td>
-			</tr>
+			<ui:fragment rendered="#{userDocument.object.id == 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.object.cCategory}" id="objectControlCategory" required="true" requiredMessage="Необходимо выбрать категорию контроля">
+							<f:selectItems value="#{userDocument.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectControlCategory" display="text"/></td>
+				</tr>
+			</ui:fragment>
+			<ui:fragment rendered="#{userDocument.object.id != 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td><h:outputText value="#{userDocument.object.cCategory.label} : #{userDocument.object.cCategory.description}"/></td>
+				</tr>
+			</ui:fragment>
 			<tr>
 				<td valign="top"><h:outputText value="Файл документа:"/></td>
 				<td>
@@ -96,4 +55,70 @@
 			</tr>
 		</tbody>
 	</table>
+	<p:outputPanel id="changeableAttributes" >
+			<ui:fragment rendered="#{userDocument.object.cCategory.cc1 or userDocument.object.cCategory.cc2 or userDocument.object.cCategory.cc3}">
+			<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectResourceManager" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Куратор:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.selectedCurator}" id="objectCurator">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectCurator" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Ответственный исполнитель:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.selectedPerformer}" id="objectPerformer">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectPerformer" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Контролер:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.selectedController}" id="objectController">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="objectController" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Дата начала работы над документом:"/></td>
+					<td><p:calendar id="startProcessDate" value="#{userDocument.object.startProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userDocument.currentDate}" maxdate="#{userDocument.object.endProcessDate}"> 
+          					<p:ajax event="dateSelect" update="endProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="startProcessDate" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Дата окончания работы над документом:"/></td>
+					<td><p:calendar id="endProcessDate" value="#{userDocument.object.endProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userDocument.object.startProcessDate}" disabled="#{userDocument.object.startProcessDate == null}"> 
+          					<p:ajax event="dateSelect" update="startProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="endProcessDate" display="text"/></td>
+				</tr>
+				</tbody>
+				</table>
+			</ui:fragment>
+			</p:outputPanel>
 </ui:composition>
