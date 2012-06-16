@@ -52,9 +52,6 @@ public class UserBean implements Serializable {
 	}
 
 	public User getCurrentUser() {
-		if (currentUser == null && getRequest().getRemoteUser() != null) {
-			currentUser = userService.findById(getRequest().getRemoteUser());
-		}
 		return currentUser;
 	}
 

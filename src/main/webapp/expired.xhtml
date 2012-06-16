@@ -10,23 +10,22 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
-	<ui:composition template="templates/main.xhtml">
+	<ui:composition template="/templates/main.xhtml">
 		<ui:define name="css">
 			<h:outputStylesheet library="css" name="login.css" />
 		</ui:define>
 		<ui:define name="content">
 			<p:messages />
-			<ui:fragment rendered="#{param['expired']}">
-				<div class="ui-messages ui-widget"
-					style="width: 450px; margin: 0 auto;">
-					<div class="ui-messages-error ui-corner-all">
-						<span class="ui-messages-error-icon" />
-						<ul>
-							<li><span class="ui-messages-error-summary">Ваш сеанс работы был завершен. Для продолжения работы авторизуйтесь заново</span></li>
-						</ul>
-					</div>
+			<div class="ui-messages ui-widget"
+				style="width: 450px; margin: 0 auto;">
+				<div class="ui-messages-error ui-corner-all">
+					<span class="ui-messages-error-icon" />
+					<ul>
+						<li><span class="ui-messages-info-summary">Ваш сеанс
+								работы был завершен. Для продолжения работы авторизуйтесь заново</span></li>
+					</ul>
 				</div>
-			</ui:fragment>
+			</div>
 			<h:form id="login">
 				<h1>Войти</h1>
 				<table>
@@ -41,8 +40,7 @@
 					</tr>
 					<tr>
 						<td colspan="2"><p:commandButton action="#{auth.loginAction}"
-								value="Войти" ajax="false" styleClass="login-button" />
-						</td>
+								value="Войти" ajax="false" styleClass="login-button" /></td>
 					</tr>
 				</table>
 			</h:form>

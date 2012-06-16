@@ -56,11 +56,14 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		CItemRevision revision = new CItemRevision();
 		revision.setcItem(object);
 		revision.setCurrentRevision(true);
+		revision.setCreatedBy(userBean.getCurrentUser());
 		object.getRevisions().add(revision);
 		LogEntry entry = new LogEntry();
 		entry.setcItem(object);
 		entry.setType(CItemOperationType.CREATION);
+		entry.setCreatedBy(userBean.getCurrentUser());
 		object.getLogEntries().add(entry);
+		object.setCreatedBy(userBean.getCurrentUser());
 	}
 
 	public void documentUploadListener(FileUploadEvent event) {

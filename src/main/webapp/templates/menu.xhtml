@@ -13,8 +13,18 @@
 	<p:outputPanel rendered="#{!empty user.currentUser}">
 		<ul>
 			<li>
-				<a href="/scms/documents">
-					<h:outputText value="Документы" /> 
+				<a href="/scms"> 
+					<h:outputText value="Мой профиль" />
+				</a>
+			</li>
+			<li>
+				<a href="/scms/documents"> 
+					<h:outputText value="Мои документы" />
+				</a>
+			</li>
+			<li>
+				<a href="/scms/tasks"> 
+					<h:outputText value="Мои задачи" />
 				</a>
 			</li>
 		</ul>

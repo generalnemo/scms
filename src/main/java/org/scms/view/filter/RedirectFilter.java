@@ -29,8 +29,8 @@ public class RedirectFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		HttpSession session = request.getSession();
-		if (session.getAttribute(AuthentificationBean.AUTH_KEY) != null
+		HttpSession session = request.getSession(false);
+		if (session!=null&&session.getAttribute(AuthentificationBean.AUTH_KEY) != null
 				&& request.getRequestURI().equals(
 						filterConfig.getInitParameter("login.url"))) {
 			response.sendRedirect(filterConfig.getInitParameter("init.url"));

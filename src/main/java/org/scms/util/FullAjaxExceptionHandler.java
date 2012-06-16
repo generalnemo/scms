@@ -9,9 +9,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewExpiredException;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.ExternalContext;
@@ -63,7 +64,7 @@ public class FullAjaxExceptionHandler extends ExceptionHandlerWrapper {
 		// if (context.getPartialViewContext().isAjaxRequest()) {
 		Iterator<ExceptionQueuedEvent> unhandledExceptionQueuedEvents = getUnhandledExceptionQueuedEvents()
 				.iterator();
-		if (unhandledExceptionQueuedEvents.hasNext()) {
+		if (context != null && unhandledExceptionQueuedEvents.hasNext()) {
 			Throwable exception = unhandledExceptionQueuedEvents.next()
 					.getContext().getException();
 			unhandledExceptionQueuedEvents.remove();
@@ -79,6 +80,8 @@ public class FullAjaxExceptionHandler extends ExceptionHandlerWrapper {
 			// errorPageLocation), exception);
 			final HttpServletRequest request = (HttpServletRequest) context
 					.getExternalContext().getRequest();
+			HttpServletResponse response = (HttpServletResponse) context
+					.getExternalContext().getResponse();
 			request.setAttribute(ATTRIBUTE_ERROR_EXCEPTION, exception);
 			request.setAttribute(ATTRIBUTE_ERROR_EXCEPTION_TYPE,
 					exception.getClass());
@@ -88,27 +91,44 @@ public class FullAjaxExceptionHandler extends ExceptionHandlerWrapper {
 					request.getRequestURI());
 			request.setAttribute(ATTRIBUTE_ERROR_STATUS_CODE,
 					HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			NavigationHandler navHandler = context.getApplication()
-					.getNavigationHandler();
+			errorPageLocation += "?faces-redirect=true";
+			/*
+			 * String viewId = normalizeViewId(errorPageLocation);
+			 * context.setViewRoot(context.getApplication().getViewHandler()
+			 * .createView(context, viewId));
+			 * context.getPartialViewContext().setRenderAll(true);
+			 * context.addMessage(null,new
+			 * FacesMessage(FacesMessage.SEVERITY_ERROR
+			 * ,"Ваш сеанс работы был завершен",null));
+			 */
 			if (exception instanceof ViewExpiredException) {
-				errorPageLocation += "?expired=true";
+				if (request.getRequestURI().contains("/login")) {
+					String viewId = context.getViewRoot().getViewId()
+							+ "?expired=true";
+					context.setViewRoot(context.getApplication()
+							.getViewHandler().createView(context, viewId));
+					ViewHandler handler = context.getApplication()
+							.getViewHandler();
+					UIViewRoot root = handler.createView(context, viewId);
+					root.setViewId(viewId);
+					context.setViewRoot(root);
+				} else {
+					errorPageLocation += "&expired=true";
+				}
+					NavigationHandler handler = context.getApplication()
+							.getNavigationHandler();
+					handler.handleNavigation(context, null, errorPageLocation);
+
+				
+				context.renderResponse();
 			}
-			String viewId = normalizeViewId(errorPageLocation);
-			context.setViewRoot(context.getApplication().getViewHandler()
-					.createView(context, viewId));
-			context.getPartialViewContext().setRenderAll(true);
-			context.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Ваш сеанс работы был завершен",null));
-			context.renderResponse();
-			// Prevent some servlet containers from handling the error page
-			// itself afterwards. So far Tomcat/JBoss
-			// are known to do that. It would only result in
-			// IllegalStateException "response already committed".
 			addAfterPhaseListener(PhaseId.RENDER_RESPONSE, new Void() {
 				@Override
 				public void invoke() {
 					request.removeAttribute(ATTRIBUTE_ERROR_EXCEPTION);
 				}
 			});
+
 			// Note that we cannot set response status code to 500, the JSF ajax
 			// response won't be processed then.
 		}
@@ -117,7 +137,7 @@ public class FullAjaxExceptionHandler extends ExceptionHandlerWrapper {
 			// the first.
 			unhandledExceptionQueuedEvents.next();
 			unhandledExceptionQueuedEvents.remove();
-		}
+		}// }
 		wrapped.handle();
 	}
 
