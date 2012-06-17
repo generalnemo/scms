@@ -50,6 +50,7 @@ public class CItemService extends
 		if (object == null)
 			return null;
 		em.refresh(object);
+		object.getRevisions().size();
 		object.getRevisions().get(0).getRelationships().size();
 		return object;
 	}

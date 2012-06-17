@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.event.NodeSelectEvent;
 import org.scms.enumerate.ControlCategory;
 import org.scms.enumerate.citem.CItemType;
 import org.scms.view.bean.AbstractCItemBean;
@@ -28,5 +28,25 @@ public class UserDocumentBean extends AbstractCItemBean {
 		addProperty(PRETTY_EDIT, "pretty:editDocument");
 		addProperty(PRETTY_VIEW, "pretty:viewDocument");
 	}
+	
+	protected void pageLoad() {
+		super.pageLoad();
+		if (object!=null){
+			object.initObjectTreeNode();
+		}
+
+	}
+	
+	public void saveObject(){
+		if (object.getcCategory().isCc4()){
+			super.saveObject();
+			return;
+		}
+		
+	}
+	
+	public void onNodeSelectListener(NodeSelectEvent event) {
+        logger.info("in listener"); 
+    }
 
 }
