@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.scms.enumerate.ControlCategory;
 import org.scms.enumerate.citem.CItemType;
 
 @Entity
@@ -58,7 +59,10 @@ public class CItem extends AbstractTemporalModel {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "end_process_date")
 	private Date endProcessDate;
-
+	
+	@Column(name="control_category")
+	private ControlCategory cCategory;
+	
 	@ManyToOne
 	@JoinColumn(name = "citem_difficulty")
 	private DifficultyScaleCoeff difficulty;
@@ -171,6 +175,14 @@ public class CItem extends AbstractTemporalModel {
 
 	public void setLogEntries(List<LogEntry> logEntries) {
 		this.logEntries = logEntries;
+	}
+
+	public ControlCategory getcCategory() {
+		return cCategory;
+	}
+
+	public void setcCategory(ControlCategory cCategory) {
+		this.cCategory = cCategory;
 	}
 
 }

@@ -47,7 +47,9 @@ public abstract class AbstractCRUDService<T extends AbstractIdentityModel> {
 
 	public void add(T object) throws Exception {
 		try {
-			em.persist(em.merge(object));
+			em.persist(object);
+			em.flush();
+			em.refresh(object);
 		} catch (PersistenceException e) {
 			if (e.getMessage().contains("ConstraintViolationException")) {
 				logger.error(e.getMessage(), e);
@@ -77,6 +79,10 @@ public abstract class AbstractCRUDService<T extends AbstractIdentityModel> {
 
 	public void remove(T object) throws Exception {
 		em.remove(em.merge(object));
+	}
+
+	public EntityManager getEm() {
+		return em;
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.scms.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -58,8 +59,8 @@ public class CItemRevision extends AbstractTemporalModel {
 	@Column(name = "is_current_revision")
 	private boolean currentRevision = false;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "contexCItemRevision", fetch = FetchType.LAZY)
-	private List<CItemsRelationship> relationships;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItemRevisionTo", fetch = FetchType.LAZY)
+	private List<CItemsRelationship> relationships=new ArrayList<CItemsRelationship>();
 
 	public Double getReadiness() {
 		return readiness;

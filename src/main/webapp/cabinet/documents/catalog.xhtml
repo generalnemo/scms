@@ -13,7 +13,7 @@
       <h:form id="form">
       	<h:link value="Создать документ" outcome="/cabinet/documents/add" />
       	<p:dataTable value="#{userDocumentCatalog.objects}" var="document" paginator="true"
-                         rows="10" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
 				<p:column sortBy="#{document.name}">
 					<f:facet name="header">
 						<h:outputText value="Название" />
@@ -21,6 +21,12 @@
 					<h:outputLink value="/scms/documents/#{document.id}/edit">
 						<h:outputText value="#{document.name}" />
 					</h:outputLink>
+				</p:column>
+				<p:column sortBy="#{document.cCategory.label}">
+					<f:facet name="header">
+						<h:outputText value="КК" />
+					</f:facet>
+					<h:outputText value="#{document.cCategory.label}"/>
 				</p:column>
 				<p:column sortBy="#{document.createdBy.fullName}">
 					<f:facet name="header">
