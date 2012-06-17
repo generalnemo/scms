@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -71,14 +70,12 @@ public class UserTaskBean extends AbstractCItemBean {
 
 	public void documentUploadListener(FileUploadEvent event) {
 		UploadedFile file = event.getFile();
-		/*
-		 * if (file != null) { int revisionsCount =
-		 * document.getRevisions().size(); CItemRevision revision =
-		 * object.getRevisions().get( revisionsCount - 1);
-		 * revision.setData(file.getContents());
-		 * revision.setContentType(file.getContentType());
-		 * revision.setFileName(file.getFileName()); }
-		 */
+		if (file != null) {
+			CItemRevision revision = document.getRevisions().get(0);
+			revision.setContentType(file.getContentType());
+			revision.setData(file.getContents());
+			revision.setFileName(file.getFileName());
+		}
 	}
 
 	protected void createNewObject() {
@@ -105,10 +102,9 @@ public class UserTaskBean extends AbstractCItemBean {
 
 	public void addNewDocument() {
 		RequestContext context = RequestContext.getCurrentInstance();
-		logger.info("yeah");
 		try {
 			getService().add(document);
-			document=((CItemService) getService()).initCollections(document.getId());
+			document = ((CItemService) getService()).findById(document.getId());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -120,6 +116,41 @@ public class UserTaskBean extends AbstractCItemBean {
 		object.getRevisions().get(0).getRelationships().add(relationship);
 		context.addCallbackParam("valid", true);
 		createNewDocument();
+	}
+
+	public void deleteInputDocument(CItemRevision revision) {
+		CItemsRelationship relationship = null;
+		for (CItemsRelationship r : object.getRevisions().get(0)
+				.getRelationships()) {
+			if (r.getType().isInputTo()
+					&& r.getcItemRevisionFrom().getId() == revision.getId()) {
+				relationship = r;
+				break;
+			}
+		}
+		if (relationship != null) {
+			object.getRevisions().get(0).getRelationships().remove(relationship);
+		}
+	}
+	
+	public void deleteOutputDocument(CItemRevision revision) {
+		CItemsRelationship relationship = null;
+		for (CItemsRelationship r : object.getRevisions().get(0)
+				.getRelationships()) {
+			if (r.getType().isOutputFor()
+					&& r.getcItemRevisionFrom().getId() == revision.getId()) {
+				relationship = r;
+				break;
+			}
+		}
+		if (relationship != null) {
+			object.getRevisions().get(0).getRelationships().remove(relationship);
+			try{
+			cItemService.remove(revision.getcItem());
+			}catch(Exception e){
+				logger.error(e);
+			}
+		}
 	}
 
 	public void setSelectedDocumentResourceManager(String userName) {

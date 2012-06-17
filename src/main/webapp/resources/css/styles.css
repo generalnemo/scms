@@ -16,7 +16,7 @@ h1 {
   position: relative;
 }
 h2 { font-size: 14px; margin: 0 0 10px; }
-div#container { position: relative; margin:0 auto; width: 1000px; height: auto !important; height: 100%; min-height: 100%;}
+div#container { position: relative; margin:0 auto; width: 1200px; height: auto !important; height: 100%; min-height: 100%;}
 div#header { padding: 10px; }
 div#content { padding: 5px 5px 40px; }
 div#footer { position: absolute; width: 100%; bottom: 5px; }
@@ -32,7 +32,7 @@ div#footer { position: absolute; width: 100%; bottom: 5px; }
 #header .logout-form .user-name { font-style: italic; font-size: 14px; color: #333; }
 
 /* Реестр (общее) */
-.catalog table.filter { width: 750px; text-align: center; margin-bottom: 10px; }
+.catalog table.filter { width: 1000px; text-align: center; margin-bottom: 10px; }
 .catalog a.add { float: right; margin-top: 10px; }
 .catalog table a.button { width: 90px; }
 .catalog h1 { font-size: 20px; }

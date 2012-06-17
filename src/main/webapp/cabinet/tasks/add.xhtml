@@ -11,13 +11,10 @@
     <ui:define name="windowTitle">Создание задачи</ui:define>
     <ui:define name="content">
       <h1>Создание задачи</h1>
-      <h:form id="form">
-        <p:messages globalOnly="true" />
+      <p:messages globalOnly="true" />
         <scms:editTask />
-        <p:commandButton onclick="modalSearch.show();" value="Добавить входные документы" type="button"/>
+         <p:commandButton onclick="modalSearch.show();" value="Добавить входные документы" type="button"/>
         <p:commandButton onclick="modalAddDocument.show();" value="Добавить выходные документы" type="button"/>
-        <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false"/>
-      </h:form>
 	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false">
 		<h:form>
 		<table>
@@ -25,7 +22,7 @@
 				<tr>
 					<td><h:outputText value="Номер документа:"/></td>
 					<td><h:outputText value="Версия:"/></td>
-					<td><h:outputText value="Название"/></td>
+					<td><h:outputText value="Название:"/></td>
 					<td><h:outputText value="Автор:"/></td>
 					<td><h:outputText value="Дата создания:"/></td>
 				</tr>
@@ -180,7 +177,7 @@
 		</ui:fragment>
 	</p:outputPanel>
 			<p:commandButton oncomplete="handleDocumentSubmit(xhr, status, args)" value="Добавить" action="#{userTask.addNewDocument}" update="@form"/>
-			<p:commandButton oncomplete="modalAddDocument.hide();" value="Отмена" type="button"/>
+			<p:commandButton onclick="modalAddDocument.hide();" value="Отмена" type="button"/>
 		</h:form>
 	</p:dialog>
 	<script type="text/javascript">  

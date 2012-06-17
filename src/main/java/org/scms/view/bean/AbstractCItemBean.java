@@ -3,7 +3,6 @@ package org.scms.view.bean;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
 import org.primefaces.event.FileUploadEvent;
@@ -44,12 +43,12 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 			setObject(cItemService.findById(Long.parseLong(objectId)));
 		} catch (NumberFormatException e) {
 			PrettyRedirector.getInstance().redirect(fContext,
-					getProperty(PRETTY_CATALOG));
+					getProperty(PRETTY_404));
 			return;
 		}
 		if (object == null) {
 			PrettyRedirector.getInstance().redirect(fContext,
-					getProperty(PRETTY_CATALOG));
+					getProperty(PRETTY_404));
 			return;
 		}
 

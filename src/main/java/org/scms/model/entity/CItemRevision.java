@@ -1,6 +1,7 @@
 package org.scms.model.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -60,7 +61,36 @@ public class CItemRevision extends AbstractTemporalModel {
 	private boolean currentRevision = false;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItemRevisionTo", fetch = FetchType.LAZY)
-	private List<CItemsRelationship> relationships=new ArrayList<CItemsRelationship>();
+	private List<CItemsRelationship> relationships = new ArrayList<CItemsRelationship>();
+
+	private transient List<CItemRevision> inputDocumentRevisions = new ArrayList<CItemRevision>();
+	
+	private transient List<CItemRevision> outputDocumentRevisions = new ArrayList<CItemRevision>();
+
+	public List<CItemRevision> getInputDocumentRevisions() {
+		inputDocumentRevisions.clear();
+		if (relationships == null || relationships.isEmpty()) {
+			return Collections.emptyList();
+		}
+		for (CItemsRelationship r : relationships) {
+			if (r.getType().isInputTo()) {
+				inputDocumentRevisions.add(r.getcItemRevisionFrom());
+			}
+		}
+		return inputDocumentRevisions;
+	}
+	public List<CItemRevision> getOutputDocumentRevisions() {
+		outputDocumentRevisions.clear();
+		if (relationships == null || relationships.isEmpty()) {
+			return Collections.emptyList();
+		}
+		for (CItemsRelationship r : relationships) {
+			if (r.getType().isOutputFor()) {
+				outputDocumentRevisions.add(r.getcItemRevisionFrom());
+			}
+		}
+		return outputDocumentRevisions;
+	}
 
 	public Double getReadiness() {
 		return readiness;

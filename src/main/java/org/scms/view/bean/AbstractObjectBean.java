@@ -31,6 +31,8 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	protected static final String PRETTY_EDIT = "pretty:edit";
 
+	protected static final String PRETTY_404 = "pretty:404";
+
 	protected Map<String, String> properties = new HashMap<String, String>();
 
 	@Inject
@@ -41,7 +43,7 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	@Inject
 	protected FacesContext fContext;
-	
+
 	@Inject
 	protected UserBean userBean;
 
@@ -59,6 +61,7 @@ public abstract class AbstractObjectBean<T extends AbstractIdentityModel>
 
 	@PostConstruct
 	protected void init() {
+		properties.put(PRETTY_404, "pretty:404");
 		userList = userService.findAllUsers();
 	}
 
