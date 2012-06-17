@@ -5,8 +5,10 @@ import java.util.Date;
 public abstract class AbstractSearchFilter {
 
 	protected Long id;
-	
+
 	protected Date createdAt;
+
+	protected String userName;
 
 	public Long getId() {
 		return id;
@@ -22,6 +24,14 @@ public abstract class AbstractSearchFilter {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

@@ -15,10 +15,6 @@ public class CItemsRelationship extends AbstractTemporalModel {
 	private static final long serialVersionUID = -4408260984086348939L;
 
 	@ManyToOne
-	@JoinColumn(name = "context_citem_revision_id", nullable = false)
-	private CItemRevision contexCItemRevision;
-
-	@ManyToOne
 	@JoinColumn(name = "citem_revision_from_id", nullable = false)
 	private CItemRevision cItemRevisionFrom;
 
@@ -28,15 +24,6 @@ public class CItemsRelationship extends AbstractTemporalModel {
 	@ManyToOne
 	@JoinColumn(name = "citem_revision_to_id", nullable = false)
 	private CItemRevision cItemRevisionTo;
-
-
-	public CItemRevision getContexCItemRevision() {
-		return contexCItemRevision;
-	}
-
-	public void setContexCItemRevision(CItemRevision contexCItemRevision) {
-		this.contexCItemRevision = contexCItemRevision;
-	}
 
 	public CItemRevision getcItemRevisionFrom() {
 		return cItemRevisionFrom;

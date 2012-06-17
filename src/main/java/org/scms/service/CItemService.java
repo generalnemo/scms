@@ -10,7 +10,8 @@ import org.scms.model.entity.CItem;
 import org.scms.service.filter.CItemSearchFilter;
 
 @Stateless
-public class CItemService extends AbstractObjectService<CItemSearchFilter, CItem> {
+public class CItemService extends
+		AbstractObjectService<CItemSearchFilter, CItem> {
 
 	@Override
 	public String completeTypedQueryString(CItemSearchFilter filter,
@@ -30,7 +31,7 @@ public class CItemService extends AbstractObjectService<CItemSearchFilter, CItem
 			parametersMap.put("type", filter.getType());
 		}
 		if (filter.getUserName() != null) {
-			conditions.add("c.createdBy.userName = :userCreated");
+			conditions.add("c.createdBy.userLoginName = :userCreated");
 			parametersMap.put("userCreated", filter.getUserName());
 		}
 		if (conditions.isEmpty())
@@ -42,5 +43,14 @@ public class CItemService extends AbstractObjectService<CItemSearchFilter, CItem
 			wherePart.append(condition);
 		}
 		return query.append(wherePart).toString();
+	}
+
+	public CItem initCollections(Long id) {
+		CItem object = em.find(CItem.class, id);
+		em.refresh(object);
+		if (object.getRevisions() != null) {
+			object.getRevisions().size();
+		}
+		return object;
 	}
 }

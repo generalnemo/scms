@@ -14,8 +14,182 @@
       <h:form id="form">
         <p:messages globalOnly="true" />
         <scms:editTask />
+        <p:commandButton onclick="modalSearch.show();" value="Добавить входные документы" type="button"/>
+        <p:commandButton onclick="modalAddDocument.show();" value="Добавить выходные документы" type="button"/>
         <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false"/>
       </h:form>
+	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false">
+		<h:form>
+		<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Номер документа:"/></td>
+					<td><h:outputText value="Версия:"/></td>
+					<td><h:outputText value="Название"/></td>
+					<td><h:outputText value="Автор:"/></td>
+					<td><h:outputText value="Дата создания:"/></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="idSearch" value="#{userTask.filter.cItemId}"/></td>
+					<td><p:inputText id="versionNumSearch" value="#{userTask.filter.id}"/></td>
+					<td><p:inputText id="nameSearch" value="#{userTask.filter.cItemName}"/></td>
+					<td><p:inputText id="userSearch" value="#{userTask.filter.userName}"/></td>
+					<td><p:calendar id="dateSearch" value="#{userTask.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTask.currentDate}" readonlyInput="true"/></td>
+					<td><p:commandButton value="Найти" action="#{userTask.findDocuments}" process="@form" update="foundDocumentVersions"/></td>
+				</tr>
+			</tbody>
+		</table>
+		<p:outputPanel id="foundDocumentVersions">
+			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentVersion" paginator="true"
+                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Название документа"/>
+					</f:facet>
+					<h:outputText value="#{documentVersion.cItem.name}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="КК"/>
+					</f:facet>
+					<h:outputText value="#{documentVersion.cItem.cCategory.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Действие"/>
+					</f:facet>
+					<p:commandButton action="#{userTask.addToAdded(documentVersion)}" value="Добавить" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<p:commandButton onclick="modalSearch.hide();" value="Закрыть" type="button"/>
+		</h:form>
+	</p:dialog>
+	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false">
+		<h:form>
+			<table>
+		<tbody>
+			<tr>
+				<td><h:outputText value="Название документа:"/></td>
+				<td><p:inputText id="documentName" value="#{userTask.document.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+				<td><p:message for="documentName" display="text"/></td>
+			</tr>
+			<tr>
+				<td><h:outputText value="Описание:"/></td>
+				<td><p:inputTextarea id="documentDescription" value="#{userTask.document.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
+				<td><p:message for="documentDescription" display="text"/></td>
+			</tr>
+			<tr>
+				<td><h:outputText value="Автор:"/></td>
+				<td><h:outputText value="#{userTask.document.createdBy.fullName}"/></td>
+			</tr>
+			<ui:fragment rendered="#{userTask.document.id == 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.document.cCategory}" id="documentControlCategory" required="true" requiredMessage="Необходимо выбрать категорию контроля">
+							<f:selectItems value="#{userTask.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
+							<p:ajax event="change" update="documentChangeableAttributes"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="documentControlCategory" display="text"/></td>
+				</tr>
+			</ui:fragment>
+			<ui:fragment rendered="#{userTask.document.id != 0}">
+				<tr>
+					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td><h:outputText value="#{userTask.document.cCategory.label} : #{userTask.document.cCategory.description}"/></td>
+				</tr>
+			</ui:fragment>
+			<tr>
+				<td valign="top"><h:outputText value="Файл документа:"/></td>
+				<td>
+					
+					<p:fileUpload id="inputFile" fileUploadListener="#{userTask.documentUploadListener}"
+                		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
+                		mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this"/>
+                </td>
+                <td><p:message for="inputFile"/> </td>
+			</tr>
+		</tbody>
+	</table>
+	<p:outputPanel id="documentChangeableAttributes">
+			<ui:fragment rendered="#{userTask.document.cCategory.cc1 or userTask.document.cCategory.cc2 or userTask.document.cCategory.cc3}">
+			<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.selectedDocumentResourceManager}" id="documentResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="documentResourceManager" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Куратор:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.selectedDocumentCurator}" id="documentCurator">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="documentCurator" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Ответственный исполнитель:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.selectedDocumentPerformer}" id="documentPerformer">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="documentPerformer" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Контролер:"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.selectedDocumentController}" id="documentController">
+							<f:selectItem itemLabel="Выберите пользователя" />
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:message for="documentController" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Дата начала работы над документом:"/></td>
+					<td><p:calendar id="startProcessDate" value="#{userTask.document.startProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userTask.currentDate}" maxdate="#{userTask.document.endProcessDate}"> 
+          					<p:ajax event="dateSelect" update="endProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="startProcessDate" display="text"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Дата окончания работы над документом:"/></td>
+					<td><p:calendar id="endProcessDate" value="#{userTask.document.endProcessDate}" mode="popup"
+                    		readOnlyInputText="true" mindate="#{userTask.document.startProcessDate}" disabled="#{userTask.document.startProcessDate == null}"> 
+          					<p:ajax event="dateSelect" update="startProcessDate"/>
+        				</p:calendar>
+        			</td>
+        			<td><p:message for="endProcessDate" display="text"/></td>
+				</tr>
+			</tbody>
+			</table>
+		</ui:fragment>
+	</p:outputPanel>
+			<p:commandButton oncomplete="handleDocumentSubmit(xhr, status, args)" value="Добавить" action="#{userTask.addNewDocument}" update="@form"/>
+			<p:commandButton oncomplete="modalAddDocument.hide();" value="Отмена" type="button"/>
+		</h:form>
+	</p:dialog>
+	<script type="text/javascript">  
+    function handleDocumentSubmit(xhr, status, args) {  
+        if(args.valid) {  
+        	modalAddDocument.hide();  
+        }  
+    }  
+</script> 
     </ui:define>
   </ui:composition>
 </f:view>
