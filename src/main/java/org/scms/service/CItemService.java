@@ -45,12 +45,13 @@ public class CItemService extends
 		return query.append(wherePart).toString();
 	}
 
-	public CItem initCollections(Long id) {
+	public CItem findById(Object id) {
 		CItem object = em.find(CItem.class, id);
+		if (object == null)
+			return null;
 		em.refresh(object);
-		if (object.getRevisions() != null) {
-			object.getRevisions().size();
-		}
+		object.getRevisions().size();
+		object.getRevisions().get(0).getRelationships().size();
 		return object;
 	}
 }

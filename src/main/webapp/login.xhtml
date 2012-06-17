@@ -15,14 +15,15 @@
 			<h:outputStylesheet library="css" name="login.css" />
 		</ui:define>
 		<ui:define name="content">
+			<h1>Система поддержки документации программных проектов ФГУП "МОКБ МАРС"</h1>
 			<p:messages />
 			<ui:fragment rendered="#{param['expired']}">
 				<div class="ui-messages ui-widget"
 					style="width: 450px; margin: 0 auto;">
-					<div class="ui-messages-error ui-corner-all">
-						<span class="ui-messages-error-icon" />
+					<div class="ui-messages-info ui-corner-all">
+						<span class="ui-messages-info-icon" />
 						<ul>
-							<li><span class="ui-messages-error-summary">Ваш сеанс работы был завершен. Для продолжения работы авторизуйтесь заново</span></li>
+							<li><span class="ui-messages-info-summary">Ваш сеанс работы с системой был завершен</span></li>
 						</ul>
 					</div>
 				</div>

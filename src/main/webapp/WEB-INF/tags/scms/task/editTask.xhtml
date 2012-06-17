@@ -10,6 +10,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
+	<h:form id="form">
 	<table>
 		<tbody>
 			<tr>
@@ -41,7 +42,7 @@
 			<ui:fragment rendered="#{userTask.object.id != 0}">
 				<tr>
 					<td><h:outputText value="Категория контроля для задачи:"/></td>
-					<td><h:outputText value="#{userTask.object.cCategory.label} : #{userTask.object.cCategory.description}"/></td>
+					<td><h:outputText value="#{userTask.object.cCategory.description}"/></td>
 				</tr>
 			</ui:fragment>
 		</tbody>
@@ -112,4 +113,110 @@
 				</table>
 				</ui:fragment>	
 			</p:outputPanel>
+		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
+       	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
+        <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false"/>
+        </h:form>
+        <p:dialog widgetVar="modalInputDocuments" header="Перечень входных документов" modal="true" resizable="false">
+		<h:form>
+		
+		<p:outputPanel autoUpdate="true">
+			<p:dataTable value="#{userTask.object.revisions[0].inputDocumentRevisions}" var="documentRevision" paginator="true"
+                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Номер документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Название документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.name}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="КК документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.cCategory.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Версия документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Статус версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.state.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Дата создания версии"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.formattedCreatedAtDate}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Действие"/>
+					</f:facet>
+					<p:commandButton action="#{userTask.deleteInputDocument(documentRevision)}" value="удалить" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<p:commandButton onclick="modalInputDocuments.hide();" value="Закрыть" type="button"/>
+		<p:commandButton onclick="modalSearch.show();" value="Добавить документ" type="button"/>
+		</h:form>
+	</p:dialog>
+	<p:dialog widgetVar="modalOutputDocuments" header="Перечень выходных документов" modal="true" resizable="false">
+		<h:form>
+		
+		<p:outputPanel autoUpdate="true">
+			<p:dataTable value="#{userTask.object.revisions[0].outputDocumentRevisions}" var="documentRevision" paginator="true"
+                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Номер документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Название документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.name}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="КК документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.cCategory.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Действие"/>
+					</f:facet>
+					<p:commandButton action="#{userTask.deleteOutputDocument(documentRevision)}" value="удалить" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<p:commandButton onclick="modalOutputDocuments.hide();" value="Закрыть" type="button"/>
+		<p:commandButton onclick="modalAddDocument.show();" value="Добавить документ" type="button"/>
+		</h:form>
+	</p:dialog>
 </ui:composition>

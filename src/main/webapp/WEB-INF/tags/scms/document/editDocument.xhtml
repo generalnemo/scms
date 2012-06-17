@@ -40,19 +40,9 @@
 			<ui:fragment rendered="#{userDocument.object.id != 0}">
 				<tr>
 					<td><h:outputText value="Категория контроля для документа:"/></td>
-					<td><h:outputText value="#{userDocument.object.cCategory.label} : #{userDocument.object.cCategory.description}"/></td>
+					<td><h:outputText value="#{userDocument.object.cCategory.description}"/></td>
 				</tr>
 			</ui:fragment>
-			<tr>
-				<td valign="top"><h:outputText value="Файл документа:"/></td>
-				<td>
-					
-					<p:fileUpload id="inputFile" fileUploadListener="#{userDocument.documentUploadListener}"
-                		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
-                		mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this"/>
-                </td>
-                <td><p:message for="inputFile"/> </td>
-			</tr>
 		</tbody>
 	</table>
 	<p:outputPanel id="changeableAttributes">
@@ -120,5 +110,16 @@
 			</tbody>
 			</table>
 		</ui:fragment>
+	</p:outputPanel>
+	<h:outputText value="Файл документа:"/><br/>
+	<p:outputPanel autoUpdate="true">
+		<br/>
+		<p:fileUpload id="inputFile" fileUploadListener="#{userDocument.documentUploadListener}" rendered="#{empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"
+        		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
+            	mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this" />
+        <h:panelGrid columns="2">
+        	<h:outputText value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].fileName}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
+			<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
+		</h:panelGrid>
 	</p:outputPanel>
 </ui:composition>

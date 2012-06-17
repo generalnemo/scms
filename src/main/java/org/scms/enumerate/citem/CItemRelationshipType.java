@@ -11,6 +11,18 @@ public enum CItemRelationshipType {
 		this.label = label;
 	}
 
+	public boolean isInputTo() {
+		return this == IS_INPUT_TO;
+	}
+
+	public boolean isOutputFor() {
+		return this == IS_OUTPUT_FOR;
+	}
+
+	public boolean isParentFor() {
+		return this == IS_PARENT_FOR;
+	}
+
 	public String getLabel() {
 		return label;
 	}

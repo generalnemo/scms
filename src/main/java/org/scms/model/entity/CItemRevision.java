@@ -1,6 +1,10 @@
 package org.scms.model.entity;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -14,7 +18,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.scms.enumerate.citem.CItemState;
+import org.scms.util.JSFUtil;
 
 @Entity
 @Table(name = "configuration_item_revision")
@@ -60,7 +67,39 @@ public class CItemRevision extends AbstractTemporalModel {
 	private boolean currentRevision = false;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItemRevisionTo", fetch = FetchType.LAZY)
-	private List<CItemsRelationship> relationships=new ArrayList<CItemsRelationship>();
+	private List<CItemsRelationship> relationships = new ArrayList<CItemsRelationship>();
+
+	private transient List<CItemRevision> inputDocumentRevisions = new ArrayList<CItemRevision>();
+
+	private transient List<CItemRevision> outputDocumentRevisions = new ArrayList<CItemRevision>();
+
+	private transient StreamedContent file;
+
+	public List<CItemRevision> getInputDocumentRevisions() {
+		inputDocumentRevisions.clear();
+		if (relationships == null || relationships.isEmpty()) {
+			return Collections.emptyList();
+		}
+		for (CItemsRelationship r : relationships) {
+			if (r.getType().isInputTo()) {
+				inputDocumentRevisions.add(r.getcItemRevisionFrom());
+			}
+		}
+		return inputDocumentRevisions;
+	}
+
+	public List<CItemRevision> getOutputDocumentRevisions() {
+		outputDocumentRevisions.clear();
+		if (relationships == null || relationships.isEmpty()) {
+			return Collections.emptyList();
+		}
+		for (CItemsRelationship r : relationships) {
+			if (r.getType().isOutputFor()) {
+				outputDocumentRevisions.add(r.getcItemRevisionFrom());
+			}
+		}
+		return outputDocumentRevisions;
+	}
 
 	public Double getReadiness() {
 		return readiness;
@@ -156,6 +195,15 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	public void setCurrentRevision(boolean currentRevision) {
 		this.currentRevision = currentRevision;
+	}
+
+	public StreamedContent getFile() throws UnsupportedEncodingException {
+		if (file == null) {
+			InputStream stream = new ByteArrayInputStream(data);
+			file = new DefaultStreamedContent(stream, contentType,
+					JSFUtil.encodedFilename(fileName));
+		}
+		return file;
 	}
 
 }

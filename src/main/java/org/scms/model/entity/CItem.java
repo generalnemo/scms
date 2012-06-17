@@ -15,8 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.primefaces.model.TreeNode;
 import org.scms.enumerate.ControlCategory;
 import org.scms.enumerate.citem.CItemType;
+import org.scms.model.CItemRevisionTreeNode;
 
 @Entity
 @Table(name = "configuration_item")
@@ -59,10 +61,10 @@ public class CItem extends AbstractTemporalModel {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "end_process_date")
 	private Date endProcessDate;
-	
-	@Column(name="control_category")
+
+	@Column(name = "control_category")
 	private ControlCategory cCategory;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "citem_difficulty")
 	private DifficultyScaleCoeff difficulty;
@@ -72,6 +74,40 @@ public class CItem extends AbstractTemporalModel {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
 	private List<LogEntry> logEntries = new ArrayList<LogEntry>();
+
+	private transient CItemRevisionTreeNode objectRevisionStructure;
+
+	private transient CItemRevisionTreeNode selectedCItemRevision;
+
+	public void initObjectTreeNode() {
+		if (revisions == null || revisions.isEmpty())
+			return;
+		CItemRevision rootRevision = null;
+		for (CItemRevision revision : revisions) {
+			if (revision.getPrevRevision() == null) {
+				rootRevision = revision;
+				break;
+			}
+		}
+		objectRevisionStructure = new CItemRevisionTreeNode();
+		constructTree(new CItemRevisionTreeNode(rootRevision, objectRevisionStructure));
+	}
+
+	private void constructTree(CItemRevisionTreeNode root) {
+		for (CItemRevision revision : revisions) {
+			if (revision.getPrevRevision() != null
+					&& revision.getPrevRevision().getId() == root.getRevision()
+							.getId()) {
+				new CItemRevisionTreeNode(revision, root);
+			}
+		}
+		if (root.getChildCount() <= 0) {
+			return;
+		}
+		for (TreeNode node : root.getChildren()) {
+			constructTree((CItemRevisionTreeNode) node);
+		}
+	}
 
 	public String getName() {
 		return name;
@@ -183,6 +219,19 @@ public class CItem extends AbstractTemporalModel {
 
 	public void setcCategory(ControlCategory cCategory) {
 		this.cCategory = cCategory;
+	}
+
+	public TreeNode getObjectRevisionStructure() {
+		return objectRevisionStructure;
+	}
+
+	public CItemRevisionTreeNode getSelectedCItemRevision() {
+		return selectedCItemRevision;
+	}
+
+	public void setSelectedCItemRevision(
+			CItemRevisionTreeNode selectedCItemRevision) {
+		this.selectedCItemRevision = selectedCItemRevision;
 	}
 
 }
