@@ -18,21 +18,42 @@
 			<h:form id="form">
 				<p:messages globalOnly="true" />
 				<scms:editDocument />
-				<p:tree id="treeSingle" value="#{userDocument.object.objectRevisionStructure}" var="node"
-					selectionMode="single" selection="#{userDocument.object.selectedCItemRevision}" style="border: none; width: 100%;" dynamic="true">
-					<p:ajax event="select" listener="#{userDocument.onNodeSelectListener}" />  
-					<p:treeNode>
-						<h:outputText value="#{node}" />
-					</p:treeNode>
-				</p:tree>
-				<p:outputPanel id="panel" autoUpdate="true">
-					<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.id}"/>
-					<p:commandLink id="downloadLink" value="Скачать" ajax="false">  
-    					<p:fileDownload value="#{userDocument.object.selectedCItemRevision.revision.file}" />  
-					</p:commandLink> 
-				</p:outputPanel>
+				<p:commandButton type="button" onclick="modalRevisionsTree.show();"  value="Показать дерево версий"/>
 				<p:commandButton ajax="false" action="#{userDocument.saveObject}"  value="Сохранить изменения"/>
 			</h:form>
+			<p:dialog widgetVar="modalRevisionsTree" header="Дерево версий документа" modal="true" resizable="false">
+				<h:form>
+					<h:outputText value="Дерево версий документа:"/>
+					<p:tree id="treeSingle" value="#{userDocument.object.objectRevisionStructure}" var="node"
+						selectionMode="single" selection="#{userDocument.object.selectedCItemRevision}" style="border: none; width: 100%;" dynamic="true">
+						<p:ajax event="select" listener="#{userDocument.onNodeSelectListener}" />  
+						<p:treeNode>
+							<h:outputText value="#{node}" />
+						</p:treeNode>
+					</p:tree>
+					<p:outputPanel id="panel" autoUpdate="true">
+						<h:panelGrid columns="2" rendered="#{!empty userDocument.object.selectedCItemRevision}">
+							<h:outputText value="Номер версии:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.id}"/>
+							<h:outputText value="Дата создания:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedCreatedAtDate}"/>
+							<h:outputText value="Автор:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.createdBy.fullName}"/>
+							<h:outputText value="Статус документа:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.state.label}"/>
+							<h:outputText value="Является текущей версией:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.currentRevision?'Да':'Нет'}"/>
+							<h:outputText value="Комментарий:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.description}"/>
+							<h:outputText value="Файл версии:"/>
+							<p:commandLink id="downloadLink" value="#{userDocument.object.selectedCItemRevision.revision.fileName}" ajax="false" rendered="#{!empty userDocument.object.selectedCItemRevision.revision.file}">  
+    						<p:fileDownload value="#{userDocument.object.selectedCItemRevision.revision.file}" />  
+						</p:commandLink> 
+					</h:panelGrid>
+				</p:outputPanel>
+				<p:commandButton onclick="modalRevisionsTree.hide();" value="Закрыть" type="button"/>
+			</h:form>
+		</p:dialog>
 		</ui:define>
 	</ui:composition>
 </f:view>
