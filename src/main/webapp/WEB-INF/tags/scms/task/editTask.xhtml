@@ -209,6 +209,36 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">
+						<h:outputText value="Автор документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Версия документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Статус версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.state.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Дата создания версии"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.formattedCreatedAtDate}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
 						<h:outputText value="Действие"/>
 					</f:facet>
 					<p:commandButton action="#{userTask.deleteOutputDocument(documentRevision)}" value="удалить" />

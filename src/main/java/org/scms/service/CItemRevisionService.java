@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
+import org.scms.enumerate.citem.CItemRelationshipType;
+import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
 import org.scms.service.filter.CItemRevisionSearchFilter;
 
@@ -51,6 +55,27 @@ public class CItemRevisionService extends
 			wherePart.append(condition);
 		}
 		return query.append(wherePart + " ORDER BY c.cItem.id").toString();
+	}
+
+	public int updateRelationships(CItemRelationshipType type,
+			CItemRevision revisionFrom) {
+		em.merge(revisionFrom);
+		Query q = em
+				.createQuery("UPDATE CItemsRelationship SET cItemRevisionFrom.id = :revisionId WHERE type = :type AND cItemRevisionFrom IN (SELECT c FROM CItemRevision c WHERE c.cItem.id = :cItemId) ");
+		q.setParameter("cItemId", revisionFrom.getcItem().getId());
+		q.setParameter("revisionId", revisionFrom.getId());
+		q.setParameter("type", type);
+		return q.executeUpdate();
+	}
+
+	public CItemRevision getCurrentRevision(CItem item) {
+		TypedQuery<CItemRevision> q = em
+				.createQuery(
+						"SELECT c FROM CItemRevision c WHERE c.cItem.id = :cItemId AND c.currentRevision = :flag",
+						CItemRevision.class);
+		q.setParameter("cItemId", item.getId());
+		q.setParameter("flag", true);
+		return q.getSingleResult();
 	}
 
 }

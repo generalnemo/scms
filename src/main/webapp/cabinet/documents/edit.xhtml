@@ -27,7 +27,7 @@
 					<p:tree id="treeSingle" value="#{userDocument.object.objectRevisionStructure}" var="node"
 						selectionMode="single" selection="#{userDocument.object.selectedCItemRevision}" style="border: none; width: 100%;" dynamic="true">
 						<p:ajax event="select" listener="#{userDocument.onNodeSelectListener}" />  
-						<p:treeNode>
+						<p:treeNode icon="ui-icon-document">
 							<h:outputText value="#{node}" />
 						</p:treeNode>
 					</p:tree>

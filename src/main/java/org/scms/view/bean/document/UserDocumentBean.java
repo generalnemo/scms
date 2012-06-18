@@ -5,14 +5,17 @@ import java.util.Arrays;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.UploadedFile;
 import org.scms.enumerate.ControlCategory;
+import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
 import org.scms.model.entity.CItemRevision;
+import org.scms.service.CItemRevisionService;
 import org.scms.view.bean.AbstractCItemBean;
 
 import com.ocpsoft.pretty.faces.application.PrettyRedirector;
@@ -22,6 +25,9 @@ import com.ocpsoft.pretty.faces.application.PrettyRedirector;
 public class UserDocumentBean extends AbstractCItemBean {
 
 	private static final long serialVersionUID = -5533974832781202095L;
+
+	@Inject
+	private CItemRevisionService revisionService;
 
 	@Override
 	@PostConstruct
@@ -116,7 +122,10 @@ public class UserDocumentBean extends AbstractCItemBean {
 		}
 		object.getRevisions().get(revisionsCount - 1).setCurrentRevision(true);
 		super.saveObject();
-
+		CItemRevision currentRevision = revisionService
+				.getCurrentRevision(object);
+		revisionService.updateRelationships(
+				CItemRelationshipType.IS_OUTPUT_FOR, currentRevision);
 	}
 
 	public void onNodeSelectListener(NodeSelectEvent event) {

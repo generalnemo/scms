@@ -121,5 +121,6 @@
         	<h:outputText value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].fileName}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
 			<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
 		</h:panelGrid>
+		<br/>
 	</p:outputPanel>
 </ui:composition>
