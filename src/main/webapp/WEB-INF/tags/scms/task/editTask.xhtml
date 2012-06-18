@@ -11,7 +11,7 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
 	<h:form id="form">
-	<table>
+	<table class="editTable">
 		<tbody>
 			<tr>
 				<td><h:outputText value="Название задачи:"/></td>
@@ -51,6 +51,21 @@
 			<ui:fragment rendered="#{!empty userTask.object.cCategory and (userTask.object.cCategory.cc1 or userTask.object.cCategory.cc2 or userTask.object.cCategory.cc3)}">
 			<table>
 			<tbody>
+				<tr>
+					<td><h:outputText value="Трудоемкость задачи (дни):"/></td>
+					<td>
+						<p:inputText id="laboriousness" value="#{userTask.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" validatorMessage="Число дней должно быть не меньше 1">
+							<f:validateDoubleRange minimum="1"/>
+						</p:inputText>
+					</td>
+					<td><p:message display="text" for="laboriousness"/></td>
+				</tr>
+				<ui:fragment rendered="#{userTask.object.id != 0}">
+					<tr>
+						<td><h:outputText value="Текущая завершенность задачи:"/></td>
+						<td><h:outputText value="#{userTask.object.revisions[0].formattedPercentReadiness}%"/> </td>
+					</tr>
+				</ui:fragment>
 				<tr>
 				<td><h:outputText value="Распорядитель ресурсов:"/></td>
 				<td>
@@ -115,7 +130,8 @@
 			</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
        	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
-        <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false"/>
+        <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false" rendered="#{userTask.object.id == 0}"/>
+        <p:commandButton value="Сохранить изменения" action="#{userTask.saveObject}" ajax="false" rendered="#{userTask.object.id != 0}"/>
         </h:form>
         <p:dialog widgetVar="modalInputDocuments" header="Перечень входных документов" modal="true" resizable="false">
 		<h:form>
@@ -237,7 +253,7 @@
 					</f:facet>
 					<h:outputText value="#{documentRevision.formattedCreatedAtDate}"/>
 				</p:column>
-				<p:column>
+				<p:column rendered="#{userTask.object.id ==0}">
 					<f:facet name="header">
 						<h:outputText value="Действие"/>
 					</f:facet>

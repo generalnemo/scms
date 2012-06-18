@@ -12,16 +12,18 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:scms="http://scms.cyber.mephi.ru/facelets">
 	<ui:composition template="/templates/main.xhtml">
-		<ui:insert name="windowTitle">Редактироваие документа</ui:insert>
+		<ui:insert name="windowTitle">Редактирование документа</ui:insert>
 		<ui:define name="content">
-			<h1>Редактирование документа</h1>
+			<h1>Редактирование документа № #{userDocument.object.id}</h1>
 			<h:form id="form">
 				<p:messages globalOnly="true" />
 				<scms:editDocument />
-				<p:commandButton type="button" onclick="modalRevisionsTree.show();"  value="Показать дерево версий"/>
-				<p:commandButton ajax="false" action="#{userDocument.saveObject}"  value="Сохранить изменения"/>
+				<ui:fragment rendered="#{!userDocument.object.cCategory.cc4}">
+					<p:commandButton type="button" onclick="modalRevisionsTree.show();"  value="Показать дерево версий" />
+					<p:commandButton ajax="false" action="#{userDocument.saveObject}"  value="Сохранить изменения"/>
+				</ui:fragment>
 			</h:form>
-			<p:dialog widgetVar="modalRevisionsTree" header="Дерево версий документа" modal="true" resizable="false">
+			<p:dialog widgetVar="modalRevisionsTree" header="Дерево версий документа" modal="true" resizable="false" rendered="#{!userDocument.object.cCategory.cc4}">
 				<h:form>
 					<h:outputText value="Дерево версий документа:"/>
 					<p:tree id="treeSingle" value="#{userDocument.object.objectRevisionStructure}" var="node"
@@ -41,6 +43,8 @@
 							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.createdBy.fullName}"/>
 							<h:outputText value="Статус документа:"/>
 							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.state.label}"/>
+							<h:outputText value="Готовность документа:"/>
+							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedPercentReadiness}%"/>
 							<h:outputText value="Является текущей версией:"/>
 							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.currentRevision?'Да':'Нет'}"/>
 							<h:outputText value="Комментарий:"/>

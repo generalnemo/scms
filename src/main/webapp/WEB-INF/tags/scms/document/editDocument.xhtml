@@ -50,6 +50,26 @@
 			<table>
 			<tbody>
 				<tr>
+					<td><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
+					<td><p:inputText id="laboriousness" value="#{userDocument.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+					<td><p:message display="text" for="laboriousness"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Сложность документа (вес):"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.object.difficulty}" >
+							<f:selectItems value="#{userDocument.difficultyCoeffs}" var="d" itemLabel="#{d.difficultyCoeffValue}" itemValue="#{d}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+				<ui:fragment rendered="#{userDocument.object.id != 0}">
+					<tr>
+						<td><h:outputText value="Потраченное время на создание версии (дни):"/></td>
+						<td><p:inputText id="readiness" value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].readiness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+						<td><p:message display="text" for="readiness"/></td>
+				</tr>
+				</ui:fragment>
 					<td><h:outputText value="Распорядитель ресурсов:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
@@ -119,7 +139,7 @@
             	mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this" />
         <h:panelGrid columns="2">
         	<h:outputText value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].fileName}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
-			<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
+			<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}" process="@this"/>
 		</h:panelGrid>
 		<br/>
 	</p:outputPanel>

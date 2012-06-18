@@ -11,10 +11,10 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import org.scms.enumerate.ControlCategory;
 import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
+import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
 import org.scms.model.entity.CItemsRelationship;
@@ -47,8 +47,8 @@ public class UserTaskBean extends AbstractCItemBean {
 		type = CItemType.TASK;
 		filter = new CItemRevisionSearchFilter();
 		filter.setType(CItemType.DOCUMENT);
-		categories = Arrays.asList(ControlCategory.CC1, ControlCategory.CC2,
-				ControlCategory.CC3);
+		categories = Arrays.asList(CItemControlCategory.CC1, CItemControlCategory.CC2,
+				CItemControlCategory.CC3);
 		addProperty(PRETTY_CATALOG, "pretty:tasksCatalog");
 		addProperty(PRETTY_ADD, "pretty:addTask");
 		addProperty(PRETTY_EDIT, "pretty:editTask");
@@ -76,6 +76,14 @@ public class UserTaskBean extends AbstractCItemBean {
 			revision.setData(file.getContents());
 			revision.setFileName(file.getFileName());
 		}
+	}
+	
+	public void deleteUploadedDocument() {
+		int revisionsCount = document.getRevisions().size();
+		CItemRevision revision = document.getRevisions().get(revisionsCount - 1);
+		revision.setData(null);
+		revision.setContentType(null);
+		revision.setFileName(null);
 	}
 
 	protected void createNewObject() {

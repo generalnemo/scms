@@ -16,8 +16,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.primefaces.model.TreeNode;
-import org.scms.enumerate.ControlCategory;
+import org.scms.enumerate.citem.CItemDifficulty;
 import org.scms.enumerate.citem.CItemType;
+import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.CItemRevisionTreeNode;
 
 @Entity
@@ -63,11 +64,10 @@ public class CItem extends AbstractTemporalModel {
 	private Date endProcessDate;
 
 	@Column(name = "control_category")
-	private ControlCategory cCategory;
+	private CItemControlCategory cCategory;
 
-	@ManyToOne
-	@JoinColumn(name = "citem_difficulty")
-	private DifficultyScaleCoeff difficulty;
+	@Column(name = "citem_difficulty")
+	private CItemDifficulty difficulty = CItemDifficulty.STANDARD;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cItem", fetch = FetchType.LAZY)
 	private List<CItemRevision> revisions = new ArrayList<CItemRevision>();
@@ -90,7 +90,8 @@ public class CItem extends AbstractTemporalModel {
 			}
 		}
 		objectRevisionStructure = new CItemRevisionTreeNode();
-		constructTree(new CItemRevisionTreeNode(rootRevision, objectRevisionStructure));
+		constructTree(new CItemRevisionTreeNode(rootRevision,
+				objectRevisionStructure));
 	}
 
 	private void constructTree(CItemRevisionTreeNode root) {
@@ -173,14 +174,6 @@ public class CItem extends AbstractTemporalModel {
 		this.laboriousness = laboriousness;
 	}
 
-	public DifficultyScaleCoeff getDifficulty() {
-		return difficulty;
-	}
-
-	public void setDifficulty(DifficultyScaleCoeff difficulty) {
-		this.difficulty = difficulty;
-	}
-
 	public Date getStartProcessDate() {
 		return startProcessDate;
 	}
@@ -213,11 +206,11 @@ public class CItem extends AbstractTemporalModel {
 		this.logEntries = logEntries;
 	}
 
-	public ControlCategory getcCategory() {
+	public CItemControlCategory getcCategory() {
 		return cCategory;
 	}
 
-	public void setcCategory(ControlCategory cCategory) {
+	public void setcCategory(CItemControlCategory cCategory) {
 		this.cCategory = cCategory;
 	}
 
@@ -232,6 +225,19 @@ public class CItem extends AbstractTemporalModel {
 	public void setSelectedCItemRevision(
 			CItemRevisionTreeNode selectedCItemRevision) {
 		this.selectedCItemRevision = selectedCItemRevision;
+	}
+
+	public CItemDifficulty getDifficulty() {
+		return difficulty;
+	}
+
+	public void setDifficulty(CItemDifficulty difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void setObjectRevisionStructure(
+			CItemRevisionTreeNode objectRevisionStructure) {
+		this.objectRevisionStructure = objectRevisionStructure;
 	}
 
 }

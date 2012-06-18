@@ -1,15 +1,17 @@
 package org.scms.view.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import org.scms.enumerate.ControlCategory;
+import org.scms.enumerate.citem.CItemDifficulty;
 import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemType;
+import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
 import org.scms.model.entity.LogEntry;
@@ -26,7 +28,10 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 
 	protected CItemType type;
 
-	protected List<ControlCategory> categories;
+	protected List<CItemControlCategory> categories;
+
+	protected List<CItemDifficulty> difficultyCoeffs = Arrays
+			.asList(CItemDifficulty.values());
 
 	@Inject
 	protected CItemService cItemService;
@@ -172,8 +177,12 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		}
 	}
 
-	public List<ControlCategory> getCategories() {
+	public List<CItemControlCategory> getCategories() {
 		return categories;
+	}
+
+	public List<CItemDifficulty> getDifficultyCoeffs() {
+		return difficultyCoeffs;
 	}
 
 }

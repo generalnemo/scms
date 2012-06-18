@@ -75,7 +75,12 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	private transient StreamedContent file;
 
+	private transient double percentReadiness = -1;
+
 	public List<CItemRevision> getInputDocumentRevisions() {
+		if (cItem.getId() != 0 && !inputDocumentRevisions.isEmpty()) {
+			return inputDocumentRevisions;
+		}
 		inputDocumentRevisions.clear();
 		if (relationships == null || relationships.isEmpty()) {
 			return Collections.emptyList();
@@ -89,6 +94,9 @@ public class CItemRevision extends AbstractTemporalModel {
 	}
 
 	public List<CItemRevision> getOutputDocumentRevisions() {
+		if (cItem.getId() != 0 && !outputDocumentRevisions.isEmpty()) {
+			return outputDocumentRevisions;
+		}
 		outputDocumentRevisions.clear();
 		if (relationships == null || relationships.isEmpty()) {
 			return Collections.emptyList();
@@ -99,6 +107,32 @@ public class CItemRevision extends AbstractTemporalModel {
 			}
 		}
 		return outputDocumentRevisions;
+	}
+
+	private double calculateObjectReadinessInThisRevision() {
+		if (cItem.getType().isDocument()) {
+			double result = readiness;
+			CItemRevision revision = prevRevision;
+			while (revision != null) {
+				result += revision.getReadiness();
+				revision = revision.getPrevRevision();
+			}
+			return result / cItem.getLaboriousness();
+		}
+		if (cItem.getType().isTask()) {
+			double result = 0, sum = 0;
+			for (CItemRevision revision : getOutputDocumentRevisions()) {
+				double diffCoeff = revision.getcItem().getDifficulty()
+						.getDifficultyCoeffValue();
+				sum += diffCoeff;
+				result += revision.getPercentReadiness() * diffCoeff;
+			}
+			if (sum == 0) {
+				return readiness / cItem.getLaboriousness();
+			}
+			return result / sum;
+		}
+		return 0;
 	}
 
 	public Double getReadiness() {
@@ -204,6 +238,21 @@ public class CItemRevision extends AbstractTemporalModel {
 					JSFUtil.encodedFilename(fileName));
 		}
 		return file;
+	}
+
+	public double getPercentReadiness() {
+		if (percentReadiness == -1) {
+			percentReadiness = calculateObjectReadinessInThisRevision();
+			if (percentReadiness > 1) {
+				cItem.setLaboriousness(cItem.getLaboriousness()
+						* percentReadiness);
+			}
+		}
+		return percentReadiness;
+	}
+
+	public int getFormattedPercentReadiness() {
+		return (int) (100 * getPercentReadiness());
 	}
 
 }

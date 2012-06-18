@@ -96,22 +96,25 @@
 					<td><h:outputText value="#{userTask.document.cCategory.label} : #{userTask.document.cCategory.description}"/></td>
 				</tr>
 			</ui:fragment>
-			<tr>
-				<td valign="top"><h:outputText value="Файл документа:"/></td>
-				<td>
-					
-					<p:fileUpload id="inputFile" fileUploadListener="#{userTask.documentUploadListener}" required="true" requiredMessage="Необходимо загрузить файл документа"
-                		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
-                		mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this"/>
-                </td>
-                <td><p:message for="inputFile"/> </td>
-			</tr>
 		</tbody>
 	</table>
 	<p:outputPanel id="documentChangeableAttributes">
 			<ui:fragment rendered="#{userTask.document.cCategory.cc1 or userTask.document.cCategory.cc2 or userTask.document.cCategory.cc3}">
 			<table>
 			<tbody>
+				<tr>
+					<td><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
+					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+					<td><p:message display="text" for="laboriousness"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Сложность документа (вес):"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTask.document.difficulty}" >
+							<f:selectItems value="#{userTask.difficultyCoeffs}" var="d" itemLabel="#{d.difficultyCoeffValue}" itemValue="#{d}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
 				<tr>
 					<td><h:outputText value="Распорядитель ресурсов:"/></td>
 					<td>
@@ -173,6 +176,18 @@
 			</tbody>
 			</table>
 		</ui:fragment>
+	</p:outputPanel>
+	<h:outputText value="Файл документа:"/><br/>
+	<p:outputPanel autoUpdate="true">
+		<br/>
+		<p:fileUpload id="inputFile" fileUploadListener="#{userTask.documentUploadListener}" rendered="#{empty userTask.document.revisions[userTask.document.revisions.size - 1].data}"
+        		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
+            	mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this" />
+        <h:panelGrid columns="2">
+        	<h:outputText value="#{userTask.document.revisions[userTask.document.revisions.size - 1].fileName}" rendered="#{!empty userTask.document.revisions[userTask.document.revisions.size - 1].data}"/>
+			<p:commandLink value="Удалить" action="#{userTask.deleteUploadedDocument}" rendered="#{!empty userTask.document.revisions[userTask.document.revisions.size - 1].data}" process="@this"/>
+		</h:panelGrid>
+		<br/>
 	</p:outputPanel>
 			<p:commandButton oncomplete="handleDocumentSubmit(xhr, status, args)" value="Добавить" action="#{userTask.addNewDocument}" update="@form"/>
 			<p:commandButton onclick="modalAddDocument.hide();" value="Отмена" type="button"/>

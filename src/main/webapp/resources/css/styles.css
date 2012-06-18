@@ -18,7 +18,7 @@ h1 {
 h2 { font-size: 14px; margin: 0 0 10px; }
 div#container { position: relative; margin:0 auto; width: 1200px; height: auto !important; height: 100%; min-height: 100%;}
 div#header { padding: 10px; }
-div#content { padding: 5px 5px 40px; }
+div#content { padding: 5px 5px 40px;}
 div#footer { position: absolute; width: 100%; bottom: 5px; }
 
 /* Clearfix method */
