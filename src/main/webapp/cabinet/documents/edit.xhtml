@@ -38,28 +38,48 @@
 						</p:treeNode>
 					</p:tree>
 					<p:outputPanel id="panel" autoUpdate="true">
-						<h:panelGrid columns="2" rendered="#{!empty userDocument.object.selectedCItemRevision}">
-							<h:outputText value="Номер версии:"/>
-							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.id}"/>
-							<h:outputText value="Дата создания:"/>
-							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedCreatedAtDate}"/>
-							<h:outputText value="Автор:"/>
-							<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.createdBy.fullName}"/>
+						<ui:fragment rendered="#{!empty userDocument.object.selectedCItemRevision}">
+						<table>
+							<tr>
+								<td><h:outputText value="Номер версии:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.id}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Дата создания:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedCreatedAtDate}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Автор:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.createdBy.fullName}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Дата создания:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedCreatedAtDate}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Файл версии:"/></td>
+								<td>
+									<p:commandLink id="downloadLink" value="#{userDocument.object.selectedCItemRevision.revision.fileName}" ajax="false" rendered="#{!empty userDocument.object.selectedCItemRevision.revision.file}">  
+    									<p:fileDownload value="#{userDocument.object.selectedCItemRevision.revision.file}" />  
+									</p:commandLink>
+								</td>
+							</tr>
 							<ui:fragment rendered="#{userDocument.object.cCategory.cc1}">
-								<h:outputText value="Статус документа:"/>
-								<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.state.label}"/>
-								<h:outputText value="Готовность документа:"/>
-								<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedPercentReadiness}%"/>
-								<h:outputText value="Является текущей версией:"/>
-								<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.currentRevision?'Да':'Нет'}"/>
-								<h:outputText value="Комментарий:"/>
-								<h:outputText value="#{userDocument.object.selectedCItemRevision.revision.description}"/>
+							<tr>
+								<td><h:outputText value="Статус документа:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.state.label}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Готовность документа:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.formattedPercentReadiness}%"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="Является текущей версией:"/></td>
+								<td><h:outputText value="#{userDocument.object.selectedCItemRevision.revision.currentRevision?'Да':'Нет'}"/></td>
+							</tr>
 							</ui:fragment>
-							<h:outputText value="Файл версии:"/>
-							<p:commandLink id="downloadLink" value="#{userDocument.object.selectedCItemRevision.revision.fileName}" ajax="false" rendered="#{!empty userDocument.object.selectedCItemRevision.revision.file}">  
-    						<p:fileDownload value="#{userDocument.object.selectedCItemRevision.revision.file}" />  
-						</p:commandLink> 
-					</h:panelGrid>
+						</table>
+						</ui:fragment>
 				</p:outputPanel>
 				<p:commandButton onclick="modalRevisionsTree.hide();" value="Закрыть" type="button"/>
 			</h:form>

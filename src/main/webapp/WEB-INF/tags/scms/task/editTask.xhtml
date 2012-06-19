@@ -136,7 +136,7 @@
 			</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
        	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
-       	<p:commandButton value="История изменений атрибутов документа" action="#{userTask.renderAttributesHistory}" process="@this" oncomplete="modalAttributesHistory.show();" rendered="#{userTask.object.id != 0}"/>				
+       	<p:commandButton value="История изменений атрибутов задачи" action="#{userTask.renderAttributesHistory}" process="@this" oncomplete="modalAttributesHistory.show();" rendered="#{userTask.object.id != 0}"/>				
         <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false" rendered="#{userTask.object.id == 0}"/>
         <p:commandButton value="Сохранить изменения" action="#{userTask.saveObject}" ajax="false" rendered="#{userTask.object.id != 0}"/>
         </h:form>
