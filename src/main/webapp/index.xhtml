@@ -10,8 +10,17 @@
     <ui:define name="css">
       <h:outputStylesheet library="css" name="login.css" />
     </ui:define>
+    <ui:insert name="windowTitle">Мой профиль</ui:insert>
     <ui:define name="content">
-      
+    	<h1>Информация о пользователе</h1>
+    	<h:panelGrid columns="2">
+    		<h:outputText value="Полное имя:"/>
+    		<h:outputText value="#{user.currentUser.fullName}"/>
+    		<h:outputText value="Имя в системе:"/>
+    		<h:outputText value="#{user.currentUser.userLoginName}"/>
+    		<h:outputText value="Роль в системе:"/>
+    		<h:outputText value="#{user.currentUser.group}"/>
+    	</h:panelGrid>
     </ui:define>
   </ui:composition>
 </f:view>

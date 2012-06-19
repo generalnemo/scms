@@ -43,8 +43,8 @@ public class CItemRevisionService extends
 			parametersMap.put("cItemId", filter.getcItemId());
 		}
 		if (filter.getcItemName() != null && !filter.getcItemName().equals("")) {
-			conditions.add("c.cItem.name = :cItemName");
-			parametersMap.put("cItemName", filter.getcItemName());
+			conditions.add("LOWER(c.cItem.name) LIKE :cItemName");
+			parametersMap.put("cItemName", "%"+filter.getcItemName().toLowerCase()+"%");
 		}
 		if (conditions.isEmpty())
 			return query.toString();

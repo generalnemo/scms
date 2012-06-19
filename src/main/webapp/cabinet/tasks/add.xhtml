@@ -28,7 +28,12 @@
 					<td><p:inputText id="idSearch" value="#{userTask.filter.cItemId}"/></td>
 					<td><p:inputText id="versionNumSearch" value="#{userTask.filter.id}"/></td>
 					<td><p:inputText id="nameSearch" value="#{userTask.filter.cItemName}"/></td>
-					<td><p:inputText id="userSearch" value="#{userTask.filter.userName}"/></td>
+					<td>
+						<p:selectOneMenu id="userSearch" value="#{userTask.filter.userName}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
 					<td><p:calendar id="dateSearch" value="#{userTask.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTask.currentDate}" readonlyInput="true"/></td>
 					<td><p:commandButton value="Найти" action="#{userTask.findDocuments}" process="@form" update="foundDocumentVersions"/></td>
 				</tr>
@@ -36,6 +41,12 @@
 		</table>
 		<p:outputPanel id="foundDocumentVersions">
 			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentRevision" emptyMessage="Документов не найдено" rows="5" paginator="true" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Номер документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.id}"/>
+				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Название документа"/>
