@@ -44,6 +44,10 @@
 					<td><h:outputText value="Категория контроля для задачи:"/></td>
 					<td><h:outputText value="#{userTask.object.cCategory.description}"/></td>
 				</tr>
+				<tr>
+					<td><h:outputText value="Дата создания задачи:"/></td>
+					<td><h:outputText value="#{userTask.object.formattedCreatedAtDate}"/></td>
+				</tr>
 			</ui:fragment>
 		</tbody>
 	</table>
@@ -187,16 +191,16 @@
 					</f:facet>
 					<h:outputText value="#{documentRevision.formattedCreatedAtDate}"/>
 				</p:column>
-				<p:column>
+				<p:column rendered="#{userTask.object.id == 0}">
 					<f:facet name="header">
 						<h:outputText value="Действие"/>
 					</f:facet>
-					<p:commandButton action="#{userTask.deleteInputDocument(documentRevision)}" value="удалить" />
+					<p:commandButton action="#{userTask.deleteInputDocument(documentRevision)}" value="Удалить" />
 				</p:column>
 			</p:dataTable>
 		</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.hide();" value="Закрыть" type="button"/>
-		<p:commandButton onclick="modalSearch.show();" value="Добавить документ" type="button"/>
+		<p:commandButton onclick="modalSearch.show();" value="Добавить документ" type="button" rendered="#{userTask.object.id == 0}"/>
 		</h:form>
 	</p:dialog>
 	<p:dialog widgetVar="modalOutputDocuments" header="Перечень выходных документов" modal="true" resizable="false">
@@ -262,7 +266,7 @@
 			</p:dataTable>
 		</p:outputPanel>
 		<p:commandButton onclick="modalOutputDocuments.hide();" value="Закрыть" type="button"/>
-		<p:commandButton onclick="modalAddDocument.show();" value="Добавить документ" type="button"/>
+		<p:commandButton onclick="modalAddDocument.show();" value="Добавить документ" type="button" rendered="#{userTask.object.id == 0}"/>
 		</h:form>
 	</p:dialog>
 </ui:composition>

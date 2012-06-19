@@ -101,7 +101,7 @@ public class UserTaskBean extends AbstractCItemBean {
 		document.getRevisions().add(revision);
 		LogEntry entry = new LogEntry();
 		entry.setcItem(document);
-		entry.setType(CItemOperationType.CREATION);
+		entry.setType(CItemOperationType.VERSION_CREATION);
 		entry.setCreatedBy(userBean.getCurrentUser());
 		document.getLogEntries().add(entry);
 		document.setCreatedBy(userBean.getCurrentUser());

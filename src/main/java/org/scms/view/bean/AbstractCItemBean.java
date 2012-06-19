@@ -2,22 +2,26 @@ package org.scms.view.bean;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.enumerate.citem.CItemDifficulty;
+import org.scms.enumerate.citem.CItemEditableProperties;
 import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemType;
-import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
 import org.scms.model.entity.LogEntry;
+import org.scms.model.entity.LogEntryEditedProperty;
 import org.scms.model.entity.User;
 import org.scms.service.AbstractCRUDService;
 import org.scms.service.CItemService;
+import org.scms.util.JSFUtil;
 
 import com.ocpsoft.pretty.faces.application.PrettyRedirector;
 
@@ -69,7 +73,7 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		object.getRevisions().add(revision);
 		LogEntry entry = new LogEntry();
 		entry.setcItem(object);
-		entry.setType(CItemOperationType.CREATION);
+		entry.setType(CItemOperationType.VERSION_CREATION);
 		entry.setCreatedBy(userBean.getCurrentUser());
 		object.getLogEntries().add(entry);
 		object.setCreatedBy(userBean.getCurrentUser());
@@ -85,6 +89,135 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 			revision.setData(file.getContents());
 			revision.setContentType(file.getContentType());
 			revision.setFileName(file.getFileName());
+		}
+	}
+
+	public void createLogEntriesForMainAttributes() {
+		if (object.getcCategory().isCc4() || object.getcCategory().isCc3()) {
+			return;
+		}
+		CItem cloneItem = cItemService.lazyFindById(object.getId());
+		LogEntry entry = new LogEntry();
+		createLogEntryForStringAttribute(entry, object.getName(),
+				cloneItem.getName(), CItemEditableProperties.NAME);
+		createLogEntryForStringAttribute(entry, object.getDescription(),
+				cloneItem.getDescription(), CItemEditableProperties.DESCRIPTION);
+		createLogEntryForNumberAttribute(entry, object.getLaboriousness(),
+				cloneItem.getLaboriousness(),
+				CItemEditableProperties.LABORIOUSNESS);
+		createLogEntryForNumberAttribute(entry, object.getDifficulty()
+				.getDifficultyCoeffValue(), cloneItem.getDifficulty()
+				.getDifficultyCoeffValue(), CItemEditableProperties.DIFFICULTY);
+		createLogEntryForUserTaskRole(entry, object.getResourceManager(),
+				cloneItem.getResourceManager(),
+				CItemEditableProperties.RESOURCE_MANAGER);
+		createLogEntryForUserTaskRole(entry, object.getCurator(),
+				cloneItem.getCurator(), CItemEditableProperties.CURATOR);
+		createLogEntryForUserTaskRole(entry, object.getController(),
+				cloneItem.getController(), CItemEditableProperties.CONTROLLER);
+		createLogEntryForUserTaskRole(entry, object.getPerformer(),
+				cloneItem.getPerformer(), CItemEditableProperties.PERFORMER);
+		createLogEntryForDateAttribute(entry, object.getStartProcessDate(),
+				cloneItem.getStartProcessDate(),
+				CItemEditableProperties.START_PROCESS_DATE);
+		createLogEntryForDateAttribute(entry, object.getEndProcessDate(),
+				cloneItem.getEndProcessDate(),
+				CItemEditableProperties.END_PROCESS_DATE);
+		if (!entry.getEditedProperties().isEmpty()) {
+			entry.setcItem(object);
+			entry.setType(CItemOperationType.SAVING);
+			entry.setCreatedBy(userBean.getCurrentUser());
+			object.getLogEntries().add(entry);
+		}
+	}
+
+	public void createLogEntryForNewRevision() {
+		int revisionsSize = object.getRevisions().size();
+		CItemRevision revision = object.getRevisions().get(revisionsSize - 1);
+		if (revision.getId() != 0)
+			return;
+		LogEntry entry = new LogEntry();
+		entry.setcItem(object);
+		entry.setType(CItemOperationType.VERSION_CREATION);
+	}
+
+	private void createLogEntryForUserTaskRole(LogEntry entry, User newValue,
+			User oldValue, CItemEditableProperties property) {
+		if (newValue == null && oldValue == null) {
+			return;
+		}
+		if (newValue == null && oldValue != null) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, null, "");
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+		if (oldValue == null
+				|| oldValue != null
+				&& !newValue.getUserLoginName().equals(
+						oldValue.getUserLoginName())) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, newValue.getUserLoginName(),
+					newValue.getFullName());
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+	}
+
+	private void createLogEntryForStringAttribute(LogEntry entry,
+			String newValue, String oldValue, CItemEditableProperties property) {
+		if (newValue == null && oldValue == null) {
+			return;
+		}
+		if (newValue == null && oldValue != null) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, null, "");
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+		if (oldValue == null || oldValue != null && !newValue.equals(oldValue)) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, newValue, newValue);
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+	}
+
+	private void createLogEntryForNumberAttribute(LogEntry entry,
+			Number newValue, Number oldValue, CItemEditableProperties property) {
+		if (newValue == null && oldValue == null) {
+			return;
+		}
+		if (newValue == null && oldValue != null) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, null, "");
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+		if (oldValue == null || oldValue != null && !newValue.equals(oldValue)) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, newValue.toString(), newValue.toString());
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+	}
+
+	private void createLogEntryForDateAttribute(LogEntry entry, Date newValue,
+			Date oldValue, CItemEditableProperties property) {
+		if (newValue == null && oldValue == null) {
+			return;
+		}
+		if (newValue == null && oldValue != null) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, null, "");
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
+		}
+		if (oldValue == null || oldValue != null && !newValue.equals(oldValue)) {
+			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
+					entry, property, JSFUtil.formatDate(newValue, "dd.MM.yyyy HH:mm:ss"), JSFUtil.formatDate(newValue, "dd.MM.yyyy HH:mm:ss"));
+			entry.getEditedProperties().add(editedPropertyLog);
+			return;
 		}
 	}
 

@@ -54,4 +54,8 @@ public class CItemService extends
 		object.getRevisions().get(0).getRelationships().size();
 		return object;
 	}
+	
+	public CItem lazyFindById(Object id) {
+		return super.findById(id);
+	}
 }

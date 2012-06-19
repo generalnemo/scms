@@ -1,5 +1,6 @@
 package org.scms.view.bean.document;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -11,10 +12,12 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.UploadedFile;
+import org.scms.enumerate.citem.CItemControlCategory;
+import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
-import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.entity.CItemRevision;
+import org.scms.model.entity.LogEntry;
 import org.scms.service.CItemRevisionService;
 import org.scms.view.bean.AbstractCItemBean;
 
@@ -94,7 +97,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 		revision.setContentType(null);
 		revision.setFileName(null);
 	}
-	
+
 	public String addObject() {
 		int revisionsCount = object.getRevisions().size();
 		if (object.getRevisions().get(revisionsCount - 1).getData() == null) {
@@ -108,6 +111,14 @@ public class UserDocumentBean extends AbstractCItemBean {
 
 	public void saveObject() {
 		int revisionsCount = object.getRevisions().size();
+		createLogEntriesForMainAttributes();
+		if (object.getcCategory().isCc3() || object.getcCategory().isCc2()) {
+			if (object.getRevisions().get(revisionsCount - 1).getId() == 0) {
+				object.getRevisions().remove(revisionsCount - 1);
+			}
+			super.saveObject();
+			return;
+		}
 		if (object.getRevisions().get(revisionsCount - 1).getData() == null) {
 			fContext.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,
@@ -128,6 +139,20 @@ public class UserDocumentBean extends AbstractCItemBean {
 			revision.setCurrentRevision(false);
 		}
 		object.getRevisions().get(revisionsCount - 1).setCurrentRevision(true);
+		try {
+			if (object.getLogEntries() == null) {
+				object.setLogEntries(new ArrayList<LogEntry>());
+			}
+			if (object.getLogEntries().isEmpty()) {
+				LogEntry entry = new LogEntry();
+				entry.setcItem(object);
+			}
+			int entriesSize = object.getLogEntries().size();
+			object.getLogEntries().get(entriesSize - 1)
+					.setType(CItemOperationType.VERSION_CREATION);
+		} catch (Exception e) {
+			logger.error(e);
+		}
 		super.saveObject();
 		CItemRevision currentRevision = revisionService
 				.getCurrentRevision(object);

@@ -2,9 +2,8 @@ package org.scms.enumerate.citem;
 
 public enum CItemOperationType {
 
-	CREATION("Создание"), SAVING("Сохранение изменений"), READINESS_CALCULATION(
-			"Обновление готовности"), STATE_CALCULATION("Обновление статуса"), VERSION_CREATION(
-			"Создание версии");
+	VERSION_CREATION("Создание версии"), SAVING("Сохранение изменений"), READINESS_CALCULATION(
+			"Обновление готовности"), STATE_CALCULATION("Обновление статуса");
 
 	private String label;
 

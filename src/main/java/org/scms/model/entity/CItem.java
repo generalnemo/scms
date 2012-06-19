@@ -11,15 +11,19 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.primefaces.model.TreeNode;
-import org.scms.enumerate.citem.CItemDifficulty;
-import org.scms.enumerate.citem.CItemType;
 import org.scms.enumerate.citem.CItemControlCategory;
+import org.scms.enumerate.citem.CItemDifficulty;
+import org.scms.enumerate.citem.CItemEditableProperties;
+import org.scms.enumerate.citem.CItemOperationType;
+import org.scms.enumerate.citem.CItemType;
 import org.scms.model.CItemRevisionTreeNode;
+import org.scms.util.JSFUtil;
 
 @Entity
 @Table(name = "configuration_item")
@@ -107,6 +111,82 @@ public class CItem extends AbstractTemporalModel {
 		}
 		for (TreeNode node : root.getChildren()) {
 			constructTree((CItemRevisionTreeNode) node);
+		}
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		super.onCreate();
+		if (logEntries.isEmpty()) {
+			LogEntry logEntry = new LogEntry();
+			logEntry.setcItem(this);
+			logEntry.setCreatedBy(getCreatedBy());
+			logEntry.setType(CItemOperationType.VERSION_CREATION);
+			logEntries.add(logEntry);
+		}
+		LogEntry entry = logEntries.get(0);
+		if (name != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.NAME, name, name));
+		}
+		if (description != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.DESCRIPTION, description,
+							description));
+		}
+		if (startProcessDate != null) {
+			String dateValue = JSFUtil.formatDate(startProcessDate,
+					"dd.MM.yyyy HH:mm:ss");
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.START_PROCESS_DATE,
+							dateValue, dateValue));
+		}
+		if (endProcessDate != null) {
+			String dateValue = JSFUtil.formatDate(endProcessDate,
+					"dd.MM.yyyy HH:mm:ss");
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.END_PROCESS_DATE,
+							dateValue, dateValue));
+		}
+		if (curator != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.CURATOR,
+							curator.getUserLoginName(), curator.getFullName()));
+		}
+		if (performer != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.PERFORMER,
+							performer.getUserLoginName(), performer.getFullName()));
+		}
+		if (controller != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.CONTROLLER,
+							controller.getUserLoginName(), controller.getFullName()));
+		}
+		if (resourceManager != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.RESOURCE_MANAGER,
+							resourceManager.getUserLoginName(), resourceManager.getFullName()));
+		}
+		if (difficulty != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.DIFFICULTY,
+							String.valueOf(difficulty.getDifficultyCoeffValue()), String.valueOf(difficulty.getDifficultyCoeffValue())));
+		}
+		if (laboriousness != null) {
+			entry.getEditedProperties().add(
+					new LogEntryEditedProperty(entry,
+							CItemEditableProperties.LABORIOUSNESS,
+							String.valueOf(laboriousness), String.valueOf(laboriousness)));
 		}
 	}
 
