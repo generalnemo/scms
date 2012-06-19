@@ -8,13 +8,19 @@
   xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui"
   xmlns:scms="http://scms.cyber.mephi.ru/facelets">
   <ui:composition template="/templates/main.xhtml">
-      <ui:insert name="windowTitle">Редактирование задачи</ui:insert>
+      <ui:insert name="windowTitle">Редактирование задачи №#{userTask.object.id}</ui:insert>
     <ui:define name="content">
-      <h1>Редактирование задачи</h1>
-      <h:form id="form">
-        <p:messages globalOnly="true" />
-        <scms:editTask />
-      </h:form>
+      <h1>Редактирование задачи №#{userTask.object.id}</h1>
+      <p:messages globalOnly="true" />
+       <scms:editTask />
+       <p:dialog widgetVar="modalAttributesHistory" header="История изменений атрибутов" modal="true" resizable="false" >
+				<h:form>
+					<h1><h:outputText value="История изменений атрибутов задачи №#{userTask.object.id}"/></h1>
+					<p:outputPanel autoUpdate="true">
+						<scms:attributesHistory collection="#{userTask.logEntries}"/>
+					</p:outputPanel>
+				</h:form>
+		</p:dialog>
     </ui:define>
   </ui:composition>
 </f:view>

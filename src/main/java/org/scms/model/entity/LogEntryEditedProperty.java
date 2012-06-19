@@ -2,8 +2,6 @@ package org.scms.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,15 +18,27 @@ public class LogEntryEditedProperty extends AbstractIdentityModel {
 	@JoinColumn(name = "log_entry_id", nullable = false, updatable = false)
 	private LogEntry logEntry;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "property_name", nullable = false, updatable = false)
 	private CItemEditableProperties property;
 
 	@Column(name = "property_value", nullable = false, updatable = false)
 	private String propertyValue;
 
-	@Column(name = "property_label", nullable = false, updatable = false)
+	@Column(name = "property_label", updatable = false)
 	private String propertyLabel;
+
+	public LogEntryEditedProperty() {
+
+	}
+
+	public LogEntryEditedProperty(LogEntry logEntry,
+			CItemEditableProperties property, String propertyValue,
+			String propertyLabel) {
+		this.logEntry = logEntry;
+		this.property = property;
+		this.propertyValue = propertyValue;
+		this.propertyLabel = propertyLabel;
+	}
 
 	public LogEntry getLogEntry() {
 		return logEntry;

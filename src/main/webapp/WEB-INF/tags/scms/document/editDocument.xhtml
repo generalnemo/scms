@@ -10,25 +10,25 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
-	<table>
+	<table class="editTable">
 		<tbody>
 			<tr>
-				<td><h:outputText value="Название документа:"/></td>
-				<td><p:inputText id="objectName" value="#{userDocument.object.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+				<td class="label"><h:outputText value="Название документа:"/></td>
+				<td><p:inputText id="objectName" value="#{userDocument.object.name}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
 				<td><p:message for="objectName" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Описание:"/></td>
-				<td><p:inputTextarea id="objectDescription" value="#{userDocument.object.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
+				<td class="label"><h:outputText value="Описание:"/></td>
+				<td><p:inputTextarea id="objectDescription" value="#{userDocument.object.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false" styleClass="value"/></td>
 				<td><p:message for="objectDescription" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Автор:"/></td>
+				<td class="label"><h:outputText value="Автор:"/></td>
 				<td><h:outputText value="#{userDocument.object.createdBy.fullName}"/></td>
 			</tr>
 			<ui:fragment rendered="#{userDocument.object.id == 0}">
 				<tr>
-					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td class="label"><h:outputText value="Категория контроля для документа:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.object.cCategory}" id="objectControlCategory" required="true" requiredMessage="Необходимо выбрать категорию контроля">
 							<f:selectItems value="#{userDocument.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
@@ -39,7 +39,7 @@
 			</ui:fragment>
 			<ui:fragment rendered="#{userDocument.object.id != 0}">
 				<tr>
-					<td><h:outputText value="Категория контроля для документа:"/></td>
+					<td class="label"><h:outputText value="Категория контроля для документа:"/></td>
 					<td><h:outputText value="#{userDocument.object.cCategory.description}"/></td>
 				</tr>
 			</ui:fragment>
@@ -47,10 +47,30 @@
 	</table>
 	<p:outputPanel id="changeableAttributes">
 			<ui:fragment rendered="#{userDocument.object.cCategory.cc1 or userDocument.object.cCategory.cc2 or userDocument.object.cCategory.cc3}">
-			<table>
+			<table class="editTable">
 			<tbody>
 				<tr>
-					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td class="label"><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
+					<td class="label"><p:inputText id="laboriousness" value="#{userDocument.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+					<td><p:message display="text" for="laboriousness"/></td>
+				</tr>
+				<tr>
+					<td class="label"><h:outputText value="Сложность документа (вес):"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocument.object.difficulty}" >
+							<f:selectItems value="#{userDocument.difficultyCoeffs}" var="d" itemLabel="#{d.difficultyCoeffValue}" itemValue="#{d}"/>
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+				<ui:fragment rendered="#{userDocument.object.id != 0}">
+					<tr>
+						<td class="label"><h:outputText value="Потраченное время на создание версии (дни):"/></td>
+						<td><p:inputText id="readiness" value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].readiness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+						<td><p:message display="text" for="readiness"/></td>
+				</tr>
+				</ui:fragment>
+					<td class="label"><h:outputText value="Распорядитель ресурсов:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -60,7 +80,7 @@
 					<td><p:message for="objectResourceManager" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Куратор:"/></td>
+					<td class="label"><h:outputText value="Куратор:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.selectedCurator}" id="objectCurator">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -70,7 +90,7 @@
 					<td><p:message for="objectCurator" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Ответственный исполнитель:"/></td>
+					<td class="label"><h:outputText value="Ответственный исполнитель:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.selectedPerformer}" id="objectPerformer">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -80,7 +100,7 @@
 					<td><p:message for="objectPerformer" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Контролер:"/></td>
+					<td class="label"><h:outputText value="Контролер:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userDocument.selectedController}" id="objectController">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -90,7 +110,7 @@
 					<td><p:message for="objectController" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата начала работы над документом:"/></td>
+					<td class="label"><h:outputText value="Дата начала работы над документом:"/></td>
 					<td><p:calendar id="startProcessDate" value="#{userDocument.object.startProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userDocument.currentDate}" maxdate="#{userDocument.object.endProcessDate}"> 
           					<p:ajax event="dateSelect" update="endProcessDate"/>
@@ -99,7 +119,7 @@
         			<td><p:message for="startProcessDate" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата окончания работы над документом:"/></td>
+					<td class="label"><h:outputText value="Дата окончания работы над документом:"/></td>
 					<td><p:calendar id="endProcessDate" value="#{userDocument.object.endProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userDocument.object.startProcessDate}" disabled="#{userDocument.object.startProcessDate == null}"> 
           					<p:ajax event="dateSelect" update="startProcessDate"/>
@@ -111,16 +131,18 @@
 			</table>
 		</ui:fragment>
 	</p:outputPanel>
-	<h:outputText value="Файл документа:"/><br/>
 	<p:outputPanel autoUpdate="true">
-		<br/>
-		<p:fileUpload id="inputFile" fileUploadListener="#{userDocument.documentUploadListener}" rendered="#{empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"
+		<ui:fragment rendered="#{userDocument.object.id == 0 or !userDocument.object.cCategory.cc4}">
+			<h:outputText value="Файл документа:"/><br/>
+			<br/>
+			<p:fileUpload id="inputFile" fileUploadListener="#{userDocument.documentUploadListener}" rendered="#{empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"
         		multiple="false" label="Добавить файл" auto="true" styleClass="simple-file"
             	mode="advanced" sizeLimit="5242880" invalidSizeMessage="Максимальный размер загружаемого файла 5 МБ" showButtons="false" update="@this" />
-        <h:panelGrid columns="2">
-        	<h:outputText value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].fileName}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
-			<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
-		</h:panelGrid>
-		<br/>
+        	<h:panelGrid columns="2">
+        		<h:outputText value="#{userDocument.object.revisions[userDocument.object.revisions.size - 1].fileName}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}"/>
+				<p:commandLink value="Удалить" action="#{userDocument.deleteUploadedDocument}" rendered="#{!empty userDocument.object.revisions[userDocument.object.revisions.size - 1].data}" process="@this"/>
+			</h:panelGrid>
+			<br/>
+		</ui:fragment>
 	</p:outputPanel>
 </ui:composition>

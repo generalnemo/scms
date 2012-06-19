@@ -1,6 +1,5 @@
 package org.scms.model.entity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,6 +9,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.scms.util.JSFUtil;
 
 @MappedSuperclass
 public abstract class AbstractTemporalModel extends AbstractIdentityModel {
@@ -42,8 +43,7 @@ public abstract class AbstractTemporalModel extends AbstractIdentityModel {
 	}
 	
 	public String getFormattedCreatedAtDate(){
-		SimpleDateFormat format=new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-		return format.format(createdAt);
+		return JSFUtil.formatDate(createdAt,"dd.MM.yyyy HH:mm:ss");
 	}
 
 }

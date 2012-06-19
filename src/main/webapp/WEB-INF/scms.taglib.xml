@@ -10,4 +10,8 @@
   	<tag-name>editTask</tag-name>
   	<source>tags/scms/task/editTask.xhtml</source>
   </tag>
+  <tag>
+  	<tag-name>attributesHistory</tag-name>
+  	<source>tags/scms/attributesHistory.xhtml</source>
+  </tag>
 </facelet-taglib>

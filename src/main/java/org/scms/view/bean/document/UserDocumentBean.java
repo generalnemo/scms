@@ -1,5 +1,6 @@
 package org.scms.view.bean.document;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -11,10 +12,12 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.UploadedFile;
-import org.scms.enumerate.ControlCategory;
+import org.scms.enumerate.citem.CItemControlCategory;
+import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
 import org.scms.model.entity.CItemRevision;
+import org.scms.model.entity.LogEntry;
 import org.scms.service.CItemRevisionService;
 import org.scms.view.bean.AbstractCItemBean;
 
@@ -34,7 +37,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 	public void init() {
 		super.init();
 		type = CItemType.DOCUMENT;
-		categories = Arrays.asList(ControlCategory.CC4);
+		categories = Arrays.asList(CItemControlCategory.CC4);
 		addProperty(PRETTY_CATALOG, "pretty:documentsCatalog");
 		addProperty(PRETTY_ADD, "pretty:addDocument");
 		addProperty(PRETTY_EDIT, "pretty:editDocument");
@@ -95,11 +98,18 @@ public class UserDocumentBean extends AbstractCItemBean {
 		revision.setFileName(null);
 	}
 
-	public void saveObject() {
-		if (object.getcCategory().isCc4()) {
-			super.saveObject();
-			return;
+	public String addObject() {
+		int revisionsCount = object.getRevisions().size();
+		if (object.getRevisions().get(revisionsCount - 1).getData() == null) {
+			fContext.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"Необходимо загрузить файл документа", null));
+			return null;
 		}
+		return super.addObject();
+	}
+
+	public void saveObjectRevision() {
 		int revisionsCount = object.getRevisions().size();
 		if (object.getRevisions().get(revisionsCount - 1).getData() == null) {
 			fContext.addMessage(null, new FacesMessage(
@@ -113,6 +123,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 					"Необходимо выбрать версию документа", null));
 			return;
 		}
+		createLogEntriesForMainAttributes();
 		object.getRevisions()
 				.get(revisionsCount - 1)
 				.setPrevRevision(
@@ -121,6 +132,21 @@ public class UserDocumentBean extends AbstractCItemBean {
 			revision.setCurrentRevision(false);
 		}
 		object.getRevisions().get(revisionsCount - 1).setCurrentRevision(true);
+		try {
+			if (object.getLogEntries() == null) {
+				object.setLogEntries(new ArrayList<LogEntry>());
+			}
+			if (object.getLogEntries().isEmpty()) {
+				LogEntry entry = new LogEntry();
+				entry.setcItem(object);
+				object.getLogEntries().add(entry);
+			}
+			int entriesSize = object.getLogEntries().size();
+			object.getLogEntries().get(entriesSize - 1)
+					.setType(CItemOperationType.VERSION_CREATION);
+		} catch (Exception e) {
+			logger.error(e);
+		}
 		super.saveObject();
 		CItemRevision currentRevision = revisionService
 				.getCurrentRevision(object);

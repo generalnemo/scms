@@ -15,4 +15,12 @@ public enum CItemType {
 		return label;
 	}
 
+	public boolean isTask() {
+		return this == TASK;
+	}
+
+	public boolean isDocument() {
+		return this == DOCUMENT;
+	}
+
 }
