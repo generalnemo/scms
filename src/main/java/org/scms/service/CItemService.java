@@ -9,7 +9,6 @@ import javax.ejb.Stateless;
 
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.LogEntry;
-import org.scms.model.entity.LogEntryEditedProperty;
 import org.scms.service.filter.CItemSearchFilter;
 
 @Stateless
@@ -36,6 +35,30 @@ public class CItemService extends
 		if (filter.getUserName() != null) {
 			conditions.add("c.createdBy.userLoginName = :userCreated");
 			parametersMap.put("userCreated", filter.getUserName());
+		}
+		if (filter.getCurator() != null) {
+			conditions.add("c.curator.userLoginName = :userCurator");
+			parametersMap.put("userCurator", filter.getCurator());
+		}
+		if (filter.getPerformer() != null) {
+			conditions.add("c.performer.userLoginName = :userPerformer");
+			parametersMap.put("userPerformer", filter.getPerformer());
+		}
+		if (filter.getResourceManager() != null) {
+			conditions.add("c.resourceManager.userLoginName = :userResourceManager");
+			parametersMap.put("userResourceManager", filter.getResourceManager());
+		}
+		if (filter.getController() != null) {
+			conditions.add("c.controller.userLoginName = :userController");
+			parametersMap.put("userController", filter.getController());
+		}
+		if (filter.getCategory() != null) {
+			conditions.add("c.cCategory = :category");
+			parametersMap.put("category", filter.getCategory());
+		}
+		if (filter.getObjectName() != null) {
+			conditions.add("LOWER(c.name) LIKE :objectName");
+			parametersMap.put("objectName", "%"+filter.getObjectName().toLowerCase()+"%");
 		}
 		if (conditions.isEmpty())
 			return query.toString();

@@ -11,9 +11,69 @@
     <ui:define name="content">
       <h1>Поиск документов</h1>
       <h:form id="form">
-      	<h:link value="Создать документ" outcome="/cabinet/documents/add" />
+      	<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Номер документа:"/></td>
+					<td><h:outputText value="Категория контроля:"/></td>
+					<td><h:outputText value="Название:"/></td>
+					<td><h:outputText value="Дата создания:"/></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="idSearch" value="#{userDocumentCatalog.filter.id}"/></td>
+					<td>
+						<p:selectOneMenu value="#{userDocumentCatalog.filter.category}">
+							<f:selectItem itemLabel="Выберите категорию"/>
+							<f:selectItems value="#{userDocumentCatalog.categories}" var="c" itemLabel="#{c.label}" itemValue="#{c}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:inputText id="nameSearch" value="#{userDocumentCatalog.filter.objectName}"/></td>
+					<td><p:calendar id="dateSearch" value="#{userDocumentCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userDocumentCatalog.currentDate}" readonlyInput="true"/></td>					
+				</tr>
+				<tr>
+					<td><h:outputText value="Автор:"/></td>
+					<td><h:outputText value="Куратор:"/></td>
+					<td><h:outputText value="Исполнитель:"/></td>
+					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+				</tr>
+				<tr>
+					<td>
+						<p:selectOneMenu value="#{userDocumentCatalog.filter.userName}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userDocumentCatalog.filter.curator}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userDocumentCatalog.filter.performer}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userDocumentCatalog.filter.resourceManager}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:commandButton value="Найти" action="#{userDocumentCatalog.findByFilter}" process="@form" update="dataTable"/></td>
+					<td><h:link value="Создать документ" outcome="/cabinet/documents/add" /></td>
+				</tr>
+			</tbody>
+		</table>
       	<p:dataTable value="#{userDocumentCatalog.objects}" var="document" paginator="true"
-                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom" id="dataTable">
+				<p:column sortBy="#{document.id}">
+					<f:facet name="header">
+						<h:outputText value="Номер документа" />
+					</f:facet>
+					<h:outputText value="#{document.id}" />
+				</p:column>
 				<p:column sortBy="#{document.name}">
 					<f:facet name="header">
 						<h:outputText value="Название" />
@@ -48,7 +108,7 @@
 				</p:column>
 				<p:column sortBy="#{document.resourceManager.fullName}">
 					<f:facet name="header">
-						<h:outputText value="Владелец ресурсов" />
+						<h:outputText value="Распорядитель ресурсов" />
 					</f:facet>
 					<h:outputText value="#{document.resourceManager.fullName}" />
 				</p:column>
