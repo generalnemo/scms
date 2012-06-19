@@ -11,9 +11,69 @@
     <ui:define name="content">
       <h1>Поиск задач</h1>
       <h:form id="form">
-      	<h:link value="Создать задачу" outcome="/cabinet/tasks/add" />
+      	<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Номер задачи:"/></td>
+					<td><h:outputText value="Категория контроля:"/></td>
+					<td><h:outputText value="Название:"/></td>
+					<td><h:outputText value="Дата создания:"/></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="idSearch" value="#{userTaskCatalog.filter.id}"/></td>
+					<td>
+						<p:selectOneMenu value="#{userTaskCatalog.filter.category}">
+							<f:selectItem itemLabel="Выберите категорию"/>
+							<f:selectItems value="#{userTaskCatalog.categories}" var="c" itemLabel="#{c.label}" itemValue="#{c}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:inputText id="nameSearch" value="#{userTaskCatalog.filter.objectName}"/></td>
+					<td><p:calendar id="dateSearch" value="#{userTaskCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTaskCatalog.currentDate}" readonlyInput="true"/></td>					
+				</tr>
+				<tr>
+					<td><h:outputText value="Автор:"/></td>
+					<td><h:outputText value="Куратор:"/></td>
+					<td><h:outputText value="Исполнитель:"/></td>
+					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+				</tr>
+				<tr>
+					<td>
+						<p:selectOneMenu value="#{userTaskCatalog.filter.userName}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userTaskCatalog.filter.curator}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userTaskCatalog.filter.performer}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<p:selectOneMenu  value="#{userTaskCatalog.filter.resourceManager}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:commandButton value="Найти" action="#{userTaskCatalog.findByFilter}" process="@form" update="dataTable"/></td>
+					<td><h:link value="Создать задачу" outcome="/cabinet/tasks/add" /></td>
+				</tr>
+			</tbody>
+		</table>
       	<p:dataTable value="#{userTaskCatalog.objects}" var="task" paginator="true"
-                         rows="10" emptyMessage="Задач не найдено" paginatorPosition="bottom">
+                         rows="5" emptyMessage="Задач не найдено" paginatorPosition="bottom" id="dataTable">
+				<p:column sortBy="#{task.id}">
+					<f:facet name="header">
+						<h:outputText value="Номер задачи" />
+					</f:facet>
+					<h:outputText value="#{task.id}" />
+				</p:column>
 				<p:column sortBy="#{task.name}">
 					<f:facet name="header">
 						<h:outputText value="Название" />
@@ -21,6 +81,12 @@
 					<h:outputLink value="/scms/tasks/#{task.id}/edit">
 						<h:outputText value="#{task.name}" />
 					</h:outputLink>
+				</p:column>
+				<p:column sortBy="#{task.cCategory.label}">
+					<f:facet name="header">
+						<h:outputText value="КК" />
+					</f:facet>
+					<h:outputText value="#{task.cCategory.label}"/>
 				</p:column>
 				<p:column sortBy="#{task.createdBy.fullName}">
 					<f:facet name="header">
@@ -42,7 +108,7 @@
 				</p:column>
 				<p:column sortBy="#{task.resourceManager.fullName}">
 					<f:facet name="header">
-						<h:outputText value="Владелец ресурсов" />
+						<h:outputText value="Распорядитель ресурсов" />
 					</f:facet>
 					<h:outputText value="#{task.resourceManager.fullName}" />
 				</p:column>

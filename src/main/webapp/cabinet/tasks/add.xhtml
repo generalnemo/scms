@@ -28,14 +28,25 @@
 					<td><p:inputText id="idSearch" value="#{userTask.filter.cItemId}"/></td>
 					<td><p:inputText id="versionNumSearch" value="#{userTask.filter.id}"/></td>
 					<td><p:inputText id="nameSearch" value="#{userTask.filter.cItemName}"/></td>
-					<td><p:inputText id="userSearch" value="#{userTask.filter.userName}"/></td>
+					<td>
+						<p:selectOneMenu id="userSearch" value="#{userTask.filter.userName}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
 					<td><p:calendar id="dateSearch" value="#{userTask.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTask.currentDate}" readonlyInput="true"/></td>
 					<td><p:commandButton value="Найти" action="#{userTask.findDocuments}" process="@form" update="foundDocumentVersions"/></td>
 				</tr>
 			</tbody>
 		</table>
 		<p:outputPanel id="foundDocumentVersions">
-			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentRevision" emptyMessage="Документов не найдено" >
+			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentRevision" emptyMessage="Документов не найдено" rows="5" paginator="true" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Номер документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.id}"/>
+				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Название документа"/>
@@ -91,39 +102,39 @@
 	</p:dialog>
 	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false">
 		<h:form>
-			<table>
+			<table class="editTable">
 		<tbody>
 			<tr>
-				<td><h:outputText value="Название документа:"/></td>
-				<td><p:inputText id="documentName" value="#{userTask.document.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+				<td class="label"><h:outputText value="Название документа:"/></td>
+				<td><p:inputText id="documentName" value="#{userTask.document.name}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
 				<td><p:message for="documentName" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Описание:"/></td>
-				<td><p:inputTextarea id="documentDescription" value="#{userTask.document.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
+				<td class="label"><h:outputText value="Описание:"/></td>
+				<td><p:inputTextarea id="documentDescription" value="#{userTask.document.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false" styleClass="value"/></td>
 				<td><p:message for="documentDescription" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Автор:"/></td>
+				<td class="label"><h:outputText value="Автор:"/></td>
 				<td><h:outputText value="#{userTask.document.createdBy.fullName}"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Категория контроля для документа:"/></td>
+				<td class="label"><h:outputText value="Категория контроля для документа:"/></td>
 				<td><h:outputText value="#{userTask.document.cCategory.description}"/></td>
 			</tr>
 		</tbody>
 	</table>
 	<p:outputPanel id="documentChangeableAttributes">
 			<ui:fragment rendered="#{userTask.document.cCategory.cc1 or userTask.document.cCategory.cc2 or userTask.document.cCategory.cc3}">
-			<table>
+			<table class="editTable">
 			<tbody>
 				<tr>
-					<td><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
-					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+					<td class="label"><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
+					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
 					<td><p:message display="text" for="laboriousness"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Сложность документа (вес):"/></td>
+					<td class="label"><h:outputText value="Сложность документа (вес):"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.document.difficulty}" >
 							<f:selectItems value="#{userTask.difficultyCoeffs}" var="d" itemLabel="#{d.difficultyCoeffValue}" itemValue="#{d}"/>
@@ -131,7 +142,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td class="label"><h:outputText value="Распорядитель ресурсов:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.selectedDocumentResourceManager}" id="documentResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -141,7 +152,7 @@
 					<td><p:message for="documentResourceManager" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Куратор:"/></td>
+					<td class="label"><h:outputText value="Куратор:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.selectedDocumentCurator}" id="documentCurator">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -151,7 +162,7 @@
 					<td><p:message for="documentCurator" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Ответственный исполнитель:"/></td>
+					<td class="label"><h:outputText value="Ответственный исполнитель:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.selectedDocumentPerformer}" id="documentPerformer">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -161,7 +172,7 @@
 					<td><p:message for="documentPerformer" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Контролер:"/></td>
+					<td class="label"><h:outputText value="Контролер:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.selectedDocumentController}" id="documentController">
 							<f:selectItem itemLabel="Выберите пользователя" />
@@ -171,7 +182,7 @@
 					<td><p:message for="documentController" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата начала работы над документом:"/></td>
+					<td class="label"><h:outputText value="Дата начала работы над документом:"/></td>
 					<td><p:calendar id="startProcessDate" value="#{userTask.document.startProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userTask.currentDate}" maxdate="#{userTask.document.endProcessDate}"> 
           					<p:ajax event="dateSelect" update="endProcessDate"/>
@@ -180,7 +191,7 @@
         			<td><p:message for="startProcessDate" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата окончания работы над документом:"/></td>
+					<td class="label"><h:outputText value="Дата окончания работы над документом:"/></td>
 					<td><p:calendar id="endProcessDate" value="#{userTask.document.endProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userTask.document.startProcessDate}" disabled="#{userTask.document.startProcessDate == null}"> 
           					<p:ajax event="dateSelect" update="startProcessDate"/>
