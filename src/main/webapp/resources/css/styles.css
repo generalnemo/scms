@@ -56,7 +56,10 @@ div#footer { position: absolute; width: 100%; bottom: 5px; }
 .simple-file .fileupload-buttonbar .ui-button { border: 0; }
 .simple-file .fileupload-buttonbar .ui-button-icon-left { display: none; }
 .simple-file .fileupload-buttonbar .ui-button-text { padding: 4px 10px; font-size: 11px; }
-
+.editTable { width: 100%; }
+.editTable .label { width: 25%; }
+.editTable .value { width: 70%; }
+.editTable .selectValue { width: 50%; }
 /* Просмотр */
 .edit-object table.view-media-list { margin: 0; }
 .edit-object table.view-media-list tr td { border-bottom: none;}

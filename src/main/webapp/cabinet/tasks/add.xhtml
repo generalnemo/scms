@@ -35,25 +35,54 @@
 			</tbody>
 		</table>
 		<p:outputPanel id="foundDocumentVersions">
-			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentVersion" paginator="true"
-                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentRevision" emptyMessage="Документов не найдено" >
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Название документа"/>
 					</f:facet>
-					<h:outputText value="#{documentVersion.cItem.name}"/>
+					<h:outputText value="#{documentRevision.cItem.name}"/>
 				</p:column>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="КК"/>
+						<h:outputText value="КК документа"/>
 					</f:facet>
-					<h:outputText value="#{documentVersion.cItem.cCategory.label}"/>
+					<h:outputText value="#{documentRevision.cItem.cCategory.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.cItem.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Версия документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Статус версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.state.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор версии документа"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Дата создания версии"/>
+					</f:facet>
+					<h:outputText value="#{documentRevision.formattedCreatedAtDate}"/>
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Действие"/>
 					</f:facet>
-					<p:commandButton action="#{userTask.addToAdded(documentVersion)}" value="Добавить" />
+					<p:commandButton action="#{userTask.addToAdded(documentRevision)}" value="Добавить" />
 				</p:column>
 			</p:dataTable>
 		</p:outputPanel>
@@ -78,24 +107,10 @@
 				<td><h:outputText value="Автор:"/></td>
 				<td><h:outputText value="#{userTask.document.createdBy.fullName}"/></td>
 			</tr>
-			<ui:fragment rendered="#{userTask.document.id == 0}">
-				<tr>
-					<td><h:outputText value="Категория контроля для документа:"/></td>
-					<td>
-						<p:selectOneMenu value="#{userTask.document.cCategory}" id="documentControlCategory" required="true" requiredMessage="Необходимо выбрать категорию контроля">
-							<f:selectItems value="#{userTask.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
-							<p:ajax event="change" update="documentChangeableAttributes"/>
-						</p:selectOneMenu>
-					</td>
-					<td><p:message for="documentControlCategory" display="text"/></td>
-				</tr>
-			</ui:fragment>
-			<ui:fragment rendered="#{userTask.document.id != 0}">
-				<tr>
-					<td><h:outputText value="Категория контроля для документа:"/></td>
-					<td><h:outputText value="#{userTask.document.cCategory.label} : #{userTask.document.cCategory.description}"/></td>
-				</tr>
-			</ui:fragment>
+			<tr>
+				<td><h:outputText value="Категория контроля для документа:"/></td>
+				<td><h:outputText value="#{userTask.document.cCategory.description}"/></td>
+			</tr>
 		</tbody>
 	</table>
 	<p:outputPanel id="documentChangeableAttributes">

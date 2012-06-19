@@ -109,16 +109,8 @@ public class UserDocumentBean extends AbstractCItemBean {
 		return super.addObject();
 	}
 
-	public void saveObject() {
+	public void saveObjectRevision() {
 		int revisionsCount = object.getRevisions().size();
-		createLogEntriesForMainAttributes();
-		if (object.getcCategory().isCc3() || object.getcCategory().isCc2()) {
-			if (object.getRevisions().get(revisionsCount - 1).getId() == 0) {
-				object.getRevisions().remove(revisionsCount - 1);
-			}
-			super.saveObject();
-			return;
-		}
 		if (object.getRevisions().get(revisionsCount - 1).getData() == null) {
 			fContext.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,
@@ -131,6 +123,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 					"Необходимо выбрать версию документа", null));
 			return;
 		}
+		createLogEntriesForMainAttributes();
 		object.getRevisions()
 				.get(revisionsCount - 1)
 				.setPrevRevision(
@@ -146,6 +139,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 			if (object.getLogEntries().isEmpty()) {
 				LogEntry entry = new LogEntry();
 				entry.setcItem(object);
+				object.getLogEntries().add(entry);
 			}
 			int entriesSize = object.getLogEntries().size();
 			object.getLogEntries().get(entriesSize - 1)

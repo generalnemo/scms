@@ -47,7 +47,7 @@ public class UserTaskBean extends AbstractCItemBean {
 		type = CItemType.TASK;
 		filter = new CItemRevisionSearchFilter();
 		filter.setType(CItemType.DOCUMENT);
-		categories = Arrays.asList(CItemControlCategory.CC1, CItemControlCategory.CC2,
+		categories = Arrays.asList(CItemControlCategory.CC2,
 				CItemControlCategory.CC3);
 		addProperty(PRETTY_CATALOG, "pretty:tasksCatalog");
 		addProperty(PRETTY_ADD, "pretty:addTask");
@@ -94,6 +94,7 @@ public class UserTaskBean extends AbstractCItemBean {
 	protected void createNewDocument() {
 		document = new CItem();
 		document.setType(CItemType.DOCUMENT);
+		document.setcCategory(CItemControlCategory.CC1);
 		CItemRevision revision = new CItemRevision();
 		revision.setcItem(document);
 		revision.setCurrentRevision(true);
@@ -105,7 +106,6 @@ public class UserTaskBean extends AbstractCItemBean {
 		entry.setCreatedBy(userBean.getCurrentUser());
 		document.getLogEntries().add(entry);
 		document.setCreatedBy(userBean.getCurrentUser());
-		document.setcCategory(categories.get(0));
 	}
 
 	public void addNewDocument() {

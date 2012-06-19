@@ -14,25 +14,25 @@
 	<table class="editTable">
 		<tbody>
 			<tr>
-				<td><h:outputText value="Название задачи:"/></td>
-				<td><p:inputText id="objectName" value="#{userTask.object.name}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+				<td class="label"><h:outputText value="Название задачи:"/></td>
+				<td><p:inputText id="objectName" value="#{userTask.object.name}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
 				<td><p:message for="objectName" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Описание:"/></td>
-				<td><p:inputTextarea id="objectDescription" value="#{userTask.object.description}" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
+				<td class="label"><h:outputText value="Описание:"/></td>
+				<td><p:inputTextarea id="objectDescription" value="#{userTask.object.description}" styleClass="value" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
 				<td><p:message for="objectDescription" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Автор:"/></td>
-				<td><h:outputText value="#{userTask.object.createdBy.fullName}"/></td>
+				<td class="label"><h:outputText value="Автор:"/></td>
+				<td><h:outputText value="#{userTask.object.createdBy.fullName}" styleClass="value"/></td>
 			</tr>
 			<ui:fragment rendered="#{userTask.object.id == 0}">
 				<tr>
-					<td><h:outputText value="Категория контроля для задачи:"/></td>
+					<td class="label"><h:outputText value="Категория контроля для задачи:"/></td>
 					<td>
 						<p:selectOneMenu value="#{userTask.object.cCategory}" id="objectControlCategory">
-							<f:selectItems value="#{userTask.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}"/>
+							<f:selectItems value="#{userTask.categories}" var="cat" itemLabel="#{cat.description}" itemValue="#{cat}" />
 							<p:ajax update="changeableAttributes" event="change"/>
 						</p:selectOneMenu>
 					</td>
@@ -41,37 +41,39 @@
 			</ui:fragment>
 			<ui:fragment rendered="#{userTask.object.id != 0}">
 				<tr>
-					<td><h:outputText value="Категория контроля для задачи:"/></td>
-					<td><h:outputText value="#{userTask.object.cCategory.description}"/></td>
+					<td class="label"><h:outputText value="Категория контроля для задачи:"/></td>
+					<td class="value"><h:outputText value="#{userTask.object.cCategory.description}"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата создания задачи:"/></td>
+					<td class="label"><h:outputText value="Дата создания задачи:"/></td>
 					<td><h:outputText value="#{userTask.object.formattedCreatedAtDate}"/></td>
 				</tr>
 			</ui:fragment>
 		</tbody>
 	</table>
-	<p:outputPanel id="changeableAttributes">
+	<p:outputPanel id="changeableAttributes" autoUpdate="true">
 			<ui:fragment rendered="#{!empty userTask.object.cCategory and (userTask.object.cCategory.cc1 or userTask.object.cCategory.cc2 or userTask.object.cCategory.cc3)}">
-			<table>
+			<table class="editTable">
 			<tbody>
+				<ui:fragment rendered="#{empty userTask.object.revisions[0].outputDocumentRevisions}">
 				<tr>
-					<td><h:outputText value="Трудоемкость задачи (дни):"/></td>
+					<td class="label"><h:outputText value="Трудоемкость задачи (дни):"/></td>
 					<td>
-						<p:inputText id="laboriousness" value="#{userTask.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" validatorMessage="Число дней должно быть не меньше 1">
+						<p:inputText id="laboriousness" value="#{userTask.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"  validatorMessage="Число дней должно быть не меньше 1">
 							<f:validateDoubleRange minimum="1"/>
 						</p:inputText>
 					</td>
 					<td><p:message display="text" for="laboriousness"/></td>
 				</tr>
+				</ui:fragment>
 				<ui:fragment rendered="#{userTask.object.id != 0}">
 					<tr>
-						<td><h:outputText value="Текущая завершенность задачи:"/></td>
-						<td><h:outputText value="#{userTask.object.revisions[0].formattedPercentReadiness}%"/> </td>
+						<td class="label"><h:outputText value="Текущая завершенность задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].formattedPercentReadiness}%"/> </td>
 					</tr>
 				</ui:fragment>
 				<tr>
-				<td><h:outputText value="Распорядитель ресурсов:"/></td>
+				<td class="label"><h:outputText value="Распорядитель ресурсов:"/></td>
 				<td>
 					<p:selectOneMenu value="#{userTask.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 						<f:selectItem itemLabel="Выберите пользователя" />
@@ -81,7 +83,7 @@
 				<td><p:message for="objectResourceManager" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Куратор:"/></td>
+				<td class="label"><h:outputText value="Куратор:"/></td>
 				<td>
 					<p:selectOneMenu value="#{userTask.selectedCurator}" id="objectCurator">
 						<f:selectItem itemLabel="Выберите пользователя" />
@@ -91,7 +93,7 @@
 				<td><p:message for="objectCurator" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Ответственный исполнитель:"/></td>
+				<td class="label"><h:outputText value="Ответственный исполнитель:"/></td>
 				<td>
 					<p:selectOneMenu value="#{userTask.selectedPerformer}" id="objectPerformer">
 						<f:selectItem itemLabel="Выберите пользователя" />
@@ -101,7 +103,7 @@
 				<td><p:message for="objectPerformer" display="text"/></td>
 			</tr>
 			<tr>
-				<td><h:outputText value="Контролер:"/></td>
+				<td class="label"><h:outputText value="Контролер:"/></td>
 				<td>
 					<p:selectOneMenu value="#{userTask.selectedController}" id="objectController">
 						<f:selectItem itemLabel="Выберите пользователя" />
@@ -111,7 +113,7 @@
 				<td><p:message for="objectController" display="text"/></td>
 			</tr>
 				<tr>
-					<td><h:outputText value="Дата начала работы над задачей:"/></td>
+					<td class="label"><h:outputText value="Дата начала работы над задачей:"/></td>
 					<td><p:calendar id="startProcessDate" value="#{userTask.object.startProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userTask.currentDate}" maxdate="#{userTask.object.endProcessDate}"> 
           					<p:ajax event="dateSelect" update="endProcessDate"/>
@@ -120,7 +122,7 @@
         			<td><p:message for="startProcessDate" display="text"/></td>
 				</tr>
 				<tr>
-					<td><h:outputText value="Дата окончания работы над задачей:"/></td>
+					<td class="label"><h:outputText value="Дата окончания работы над задачей:"/></td>
 					<td><p:calendar id="endProcessDate" value="#{userTask.object.endProcessDate}" mode="popup"
                     		readOnlyInputText="true" mindate="#{userTask.object.startProcessDate}" disabled="#{userTask.object.startProcessDate == null}"> 
           					<p:ajax event="dateSelect" update="startProcessDate"/>
@@ -134,15 +136,16 @@
 			</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
        	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
+       	<p:commandButton value="История изменений атрибутов документа" action="#{userTask.renderAttributesHistory}" process="@this" oncomplete="modalAttributesHistory.show();" rendered="#{userTask.object.id != 0}"/>				
         <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false" rendered="#{userTask.object.id == 0}"/>
         <p:commandButton value="Сохранить изменения" action="#{userTask.saveObject}" ajax="false" rendered="#{userTask.object.id != 0}"/>
         </h:form>
         <p:dialog widgetVar="modalInputDocuments" header="Перечень входных документов" modal="true" resizable="false">
 		<h:form>
 		
-		<p:outputPanel autoUpdate="true">
-			<p:dataTable value="#{userTask.object.revisions[0].inputDocumentRevisions}" var="documentRevision" paginator="true"
-                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+		<p:outputPanel id="inputDocuments" autoUpdate="true">
+			<p:dataTable value="#{userTask.object.revisions[0].inputDocumentRevisions}" var="documentRevision" 
+                         emptyMessage="Документов не найдено" >
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Номер документа"/>
@@ -206,9 +209,9 @@
 	<p:dialog widgetVar="modalOutputDocuments" header="Перечень выходных документов" modal="true" resizable="false">
 		<h:form>
 		
-		<p:outputPanel autoUpdate="true">
-			<p:dataTable value="#{userTask.object.revisions[0].outputDocumentRevisions}" var="documentRevision" paginator="true"
-                         rows="5" emptyMessage="Документов не найдено" paginatorPosition="bottom">
+		<p:outputPanel id="ontputDocuments" autoUpdate="true">
+			<p:dataTable value="#{userTask.object.revisions[0].outputDocumentRevisions}" var="documentRevision" 
+                          emptyMessage="Документов не найдено" >
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Номер документа"/>

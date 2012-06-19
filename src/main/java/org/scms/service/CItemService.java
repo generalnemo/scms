@@ -1,12 +1,15 @@
 package org.scms.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
 
 import org.scms.model.entity.CItem;
+import org.scms.model.entity.LogEntry;
+import org.scms.model.entity.LogEntryEditedProperty;
 import org.scms.service.filter.CItemSearchFilter;
 
 @Stateless
@@ -54,8 +57,21 @@ public class CItemService extends
 		object.getRevisions().get(0).getRelationships().size();
 		return object;
 	}
-	
+
 	public CItem lazyFindById(Object id) {
 		return super.findById(id);
+	}
+
+	public List<LogEntry> findLogEntriesByCItemId(Long id) {
+		CItem object = em.find(CItem.class, id);
+		if (object == null)
+			return Collections.emptyList();
+		em.refresh(object);
+		object.getLogEntries().size();
+		List<LogEntry> result = object.getLogEntries();
+		for (LogEntry entry : result) {
+			entry.getEditedProperties().size();
+		}
+		return result;
 	}
 }

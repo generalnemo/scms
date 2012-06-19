@@ -40,6 +40,8 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 	@Inject
 	protected CItemService cItemService;
 
+	protected List<LogEntry> logEntries;
+
 	@Override
 	protected void pageLoad() {
 		if (getObject() != null)
@@ -131,6 +133,15 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		}
 	}
 
+	public void saveObject() {
+		int revisionsCount = object.getRevisions().size();
+		createLogEntriesForMainAttributes();
+		if (object.getRevisions().get(revisionsCount - 1).getId() == 0) {
+			object.getRevisions().remove(revisionsCount - 1);
+		}
+		super.saveObject();
+	}
+	
 	public void createLogEntryForNewRevision() {
 		int revisionsSize = object.getRevisions().size();
 		CItemRevision revision = object.getRevisions().get(revisionsSize - 1);
@@ -215,10 +226,16 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		}
 		if (oldValue == null || oldValue != null && !newValue.equals(oldValue)) {
 			LogEntryEditedProperty editedPropertyLog = new LogEntryEditedProperty(
-					entry, property, JSFUtil.formatDate(newValue, "dd.MM.yyyy HH:mm:ss"), JSFUtil.formatDate(newValue, "dd.MM.yyyy HH:mm:ss"));
+					entry, property, JSFUtil.formatDate(newValue,
+							"dd.MM.yyyy HH:mm:ss"), JSFUtil.formatDate(
+							newValue, "dd.MM.yyyy HH:mm:ss"));
 			entry.getEditedProperties().add(editedPropertyLog);
 			return;
 		}
+	}
+
+	public void renderAttributesHistory() {
+		logEntries = cItemService.findLogEntriesByCItemId(object.getId());
 	}
 
 	@Override
@@ -316,6 +333,10 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 
 	public List<CItemDifficulty> getDifficultyCoeffs() {
 		return difficultyCoeffs;
+	}
+
+	public List<LogEntry> getLogEntries() {
+		return logEntries;
 	}
 
 }
