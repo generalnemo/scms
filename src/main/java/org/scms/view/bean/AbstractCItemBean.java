@@ -13,9 +13,11 @@ import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.enumerate.citem.CItemDifficulty;
 import org.scms.enumerate.citem.CItemEditableProperties;
 import org.scms.enumerate.citem.CItemOperationType;
+import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
+import org.scms.model.entity.CItemsRelationship;
 import org.scms.model.entity.LogEntry;
 import org.scms.model.entity.LogEntryEditedProperty;
 import org.scms.model.entity.User;
@@ -133,6 +135,34 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		}
 	}
 
+	// not for document
+	protected void addRelationship(CItemRevision revisionFrom,
+			CItemRelationshipType rType) {
+		CItemsRelationship relationship = new CItemsRelationship();
+		relationship.setType(rType);
+		relationship.setCreatedBy(userBean.getCurrentUser());
+		relationship.setcItemRevisionFrom(revisionFrom);
+		relationship.setcItemRevisionTo(object.getRevisions().get(0));
+		object.getRevisions().get(0).getRelationships().add(relationship);
+	}
+
+	protected void deleteRelationship(CItemRevision revisionFrom,
+			CItemRelationshipType rType) {
+		CItemsRelationship delRelationship = null;
+		for (CItemsRelationship relationship : object.getRevisions().get(0)
+				.getRelationships()) {
+			if (revisionFrom.getId() == relationship.getcItemRevisionFrom()
+					.getId() && relationship.getType() == rType) {
+				delRelationship = relationship;
+				break;
+			}
+		}
+		if (delRelationship != null) {
+			object.getRevisions().get(0).getRelationships()
+					.remove(delRelationship);
+		}
+	}
+
 	public void saveObject() {
 		int revisionsCount = object.getRevisions().size();
 		createLogEntriesForMainAttributes();
@@ -140,12 +170,18 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 			object.getRevisions().remove(revisionsCount - 1);
 		}
 		super.saveObject();
+		PrettyRedirector.getInstance().redirect(fContext,
+				getProperty(PRETTY_CATALOG));
+		return;
 	}
-	
+
 	public void saveObjectRevision() {
 		super.saveObject();
+		PrettyRedirector.getInstance().redirect(fContext,
+				getProperty(PRETTY_CATALOG));
+		return;
 	}
-	
+
 	public void createLogEntryForNewRevision() {
 		int revisionsSize = object.getRevisions().size();
 		CItemRevision revision = object.getRevisions().get(revisionsSize - 1);

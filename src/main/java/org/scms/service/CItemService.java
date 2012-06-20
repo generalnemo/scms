@@ -45,8 +45,10 @@ public class CItemService extends
 			parametersMap.put("userPerformer", filter.getPerformer());
 		}
 		if (filter.getResourceManager() != null) {
-			conditions.add("c.resourceManager.userLoginName = :userResourceManager");
-			parametersMap.put("userResourceManager", filter.getResourceManager());
+			conditions
+					.add("c.resourceManager.userLoginName = :userResourceManager");
+			parametersMap.put("userResourceManager",
+					filter.getResourceManager());
 		}
 		if (filter.getController() != null) {
 			conditions.add("c.controller.userLoginName = :userController");
@@ -58,7 +60,8 @@ public class CItemService extends
 		}
 		if (filter.getObjectName() != null) {
 			conditions.add("LOWER(c.name) LIKE :objectName");
-			parametersMap.put("objectName", "%"+filter.getObjectName().toLowerCase()+"%");
+			parametersMap.put("objectName", "%"
+					+ filter.getObjectName().toLowerCase() + "%");
 		}
 		if (conditions.isEmpty())
 			return query.toString();

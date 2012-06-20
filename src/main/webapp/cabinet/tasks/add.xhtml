@@ -13,7 +13,7 @@
       <h1>Создание задачи</h1>
       <p:messages globalOnly="true" />
         <scms:editTask />
-	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false">
+	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false" closable="false">
 		<h:form>
 		<table>
 			<tbody>
@@ -35,12 +35,12 @@
 						</p:selectOneMenu>
 					</td>
 					<td><p:calendar id="dateSearch" value="#{userTask.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTask.currentDate}" readonlyInput="true"/></td>
-					<td><p:commandButton value="Найти" action="#{userTask.findDocuments}" process="@form" update="foundDocumentVersions"/></td>
+					<td><p:commandButton value="Найти" action="#{userTask.findDocuments}" process="@form" /></td>
 				</tr>
 			</tbody>
 		</table>
-		<p:outputPanel id="foundDocumentVersions">
-			<p:dataTable value="#{userTask.foundDocumentVersions}" var="documentRevision" emptyMessage="Документов не найдено" rows="5" paginator="true" paginatorPosition="bottom">
+		<p:outputPanel id="foundDocumentVersions" autoUpdate="true">
+			<p:dataTable value="#{userTask.foundCItemsRevisions}" var="documentRevision" emptyMessage="Документов не найдено" rows="5" paginator="true" paginatorPosition="bottom">
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Номер документа"/>
@@ -97,10 +97,11 @@
 				</p:column>
 			</p:dataTable>
 		</p:outputPanel>
-		<p:commandButton onclick="modalSearch.hide();" value="Закрыть" type="button"/>
+		<p:commandButton oncomplete="modalSearch.hide();" value="Закрыть" action="#{userTask.clearSearchResults}" rendered="#{userTask.object.id == 0}"/>
+		<p:commandButton onclick="modalSearch.hide();" value="Закрыть" type="button" rendered="#{userTask.object.id != 0}"/>
 		</h:form>
 	</p:dialog>
-	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false">
+	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false" closable="false">
 		<h:form>
 			<table class="editTable">
 		<tbody>
@@ -130,7 +131,7 @@
 			<tbody>
 				<tr>
 					<td class="label"><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
-					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
+					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"><p:ajax event="change"/></p:inputText></td>
 					<td><p:message display="text" for="laboriousness"/></td>
 				</tr>
 				<tr>
@@ -147,6 +148,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentResourceManager}" id="documentResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentResourceManager" display="text"/></td>
@@ -157,6 +159,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentCurator}" id="documentCurator">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentCurator" display="text"/></td>
@@ -167,6 +170,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentPerformer}" id="documentPerformer">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentPerformer" display="text"/></td>
@@ -177,6 +181,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentController}" id="documentController">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentController" display="text"/></td>
@@ -217,6 +222,67 @@
 	</p:outputPanel>
 			<p:commandButton oncomplete="handleDocumentSubmit(xhr, status, args)" value="Добавить" action="#{userTask.addNewDocument}" update="@form"/>
 			<p:commandButton onclick="modalAddDocument.hide();" value="Отмена" type="button"/>
+		</h:form>
+	</p:dialog>
+	<p:dialog widgetVar="modalAddParentTask" header="Добавить задачу верхнего уровня" modal="true" resizable="false" closable="false">
+		<h:form>
+		<table>
+			<tbody>
+				<tr>
+					<td><h:outputText value="Номер задачи:"/></td>
+					<td><h:outputText value="Название:"/></td>
+					<td><h:outputText value="Автор:"/></td>
+					<td><h:outputText value="Дата создания:"/></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="idSearch" value="#{userTask.filter.cItemId}"/></td>
+					<td><p:inputText id="nameSearch" value="#{userTask.filter.cItemName}"/></td>
+					<td>
+						<p:selectOneMenu id="userSearch" value="#{userTask.filter.userName}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					<td><p:calendar id="dateSearch" value="#{userTask.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTask.currentDate}" readonlyInput="true"/></td>
+					<td><p:commandButton value="Найти" action="#{userTask.findTasks}" process="@form" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<p:outputPanel id="foundTasks" autoUpdate="true">
+			<p:dataTable value="#{userTask.foundCItemsRevisions}" var="taskRevision" emptyMessage="Задач не найдено" rows="5" paginator="true" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Номер задачи"/>
+					</f:facet>
+					<h:outputText value="#{taskRevision.cItem.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Название задачи"/>
+					</f:facet>
+					<h:outputText value="#{taskRevision.cItem.name}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="КК задачи"/>
+					</f:facet>
+					<h:outputText value="#{taskRevision.cItem.cCategory.label}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Автор задачи"/>
+					</f:facet>
+					<h:outputText value="#{taskRevision.cItem.createdBy.fullName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Действие"/>
+					</f:facet>
+					<p:commandButton oncomplete="modalAddParentTask.hide();" action="#{userTask.addParentTaskRevision(taskRevision)}" value="Добавить" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<p:commandButton oncomplete="modalAddParentTask.hide();" value="Закрыть" action="#{userTask.clearSearchResults}" rendered="#{userTask.object.id == 0}"/>
 		</h:form>
 	</p:dialog>
 	<script type="text/javascript">  

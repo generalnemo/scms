@@ -20,7 +20,10 @@
 			</tr>
 			<tr>
 				<td class="label"><h:outputText value="Описание:"/></td>
-				<td><p:inputTextarea id="objectDescription" value="#{userTask.object.description}" styleClass="value" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false"/></td>
+				<td><p:inputTextarea id="objectDescription" value="#{userTask.object.description}" styleClass="value" rows="5" required="true" requiredMessage="Поле не может быть пустым" autoResize="false">
+					<p:ajax event="keyup"/>
+					</p:inputTextarea>
+				</td>
 				<td><p:message for="objectDescription" display="text"/></td>
 			</tr>
 			<tr>
@@ -61,6 +64,7 @@
 					<td>
 						<p:inputText id="laboriousness" value="#{userTask.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"  validatorMessage="Число дней должно быть не меньше 1">
 							<f:validateDoubleRange minimum="1"/>
+							<p:ajax event="keyup"/>
 						</p:inputText>
 					</td>
 					<td><p:message display="text" for="laboriousness"/></td>
@@ -78,6 +82,7 @@
 					<p:selectOneMenu value="#{userTask.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 						<f:selectItem itemLabel="Выберите пользователя" />
 						<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						<p:ajax event="change"/>
 					</p:selectOneMenu>
 				</td>
 				<td><p:message for="objectResourceManager" display="text"/></td>
@@ -88,6 +93,7 @@
 					<p:selectOneMenu value="#{userTask.selectedCurator}" id="objectCurator">
 						<f:selectItem itemLabel="Выберите пользователя" />
 						<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						<p:ajax event="change"/>
 					</p:selectOneMenu>
 				</td>
 				<td><p:message for="objectCurator" display="text"/></td>
@@ -98,6 +104,7 @@
 					<p:selectOneMenu value="#{userTask.selectedPerformer}" id="objectPerformer">
 						<f:selectItem itemLabel="Выберите пользователя" />
 						<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						<p:ajax event="change"/>
 					</p:selectOneMenu>
 				</td>
 				<td><p:message for="objectPerformer" display="text"/></td>
@@ -108,6 +115,7 @@
 					<p:selectOneMenu value="#{userTask.selectedController}" id="objectController">
 						<f:selectItem itemLabel="Выберите пользователя" />
 						<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						<p:ajax event="change"/>
 					</p:selectOneMenu>
 				</td>
 				<td><p:message for="objectController" display="text"/></td>
@@ -130,12 +138,41 @@
         			</td>
         			<td><p:message for="endProcessDate" display="text"/></td>
 				</tr>
+				<ui:fragment rendered="#{userTask.object.revisions[0].parentRevision != null}">
+					<tr>
+						<td><h:outputText value="Задача верхнего уровня:"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Номер задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.id}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Название задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.name}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Автор задачи:"/></td>
+						<td><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.createdBy.fullName}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Категория контроля для задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.cCategory.description}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Дата создания задачи:"/></td>
+						<td><h:outputText value="#{userTask.object.revisions[0].parentRevision.formattedCreatedAtDate}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><p:commandLink value="Удалить" action="#{userTask.deleteParentTaskRevision(userTask.object.revisions[0].parentRevision)}" rendered="#{userTask.object.id == 0}" process="@this"/></td>
+					</tr>
+			</ui:fragment>
 				</tbody>
 				</table>
 				</ui:fragment>	
 			</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
        	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
+       	<p:commandButton onclick="modalAddParentTask.show();" value="Добавить задачу верхнего уровня" type="button" rendered="#{userTask.object.id == 0}"/>
        	<p:commandButton value="История изменений атрибутов задачи" action="#{userTask.renderAttributesHistory}" process="@this" oncomplete="modalAttributesHistory.show();" rendered="#{userTask.object.id != 0}"/>				
         <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false" rendered="#{userTask.object.id == 0}"/>
         <p:commandButton value="Сохранить изменения" action="#{userTask.saveObject}" ajax="false" rendered="#{userTask.object.id != 0}"/>

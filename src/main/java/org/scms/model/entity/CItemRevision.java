@@ -77,6 +77,8 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	private transient double percentReadiness = -1;
 
+	private transient CItemRevision parentRevision;
+
 	public List<CItemRevision> getInputDocumentRevisions() {
 		if (cItem.getId() != 0 && !inputDocumentRevisions.isEmpty()) {
 			return inputDocumentRevisions;
@@ -253,6 +255,23 @@ public class CItemRevision extends AbstractTemporalModel {
 
 	public int getFormattedPercentReadiness() {
 		return (int) (100 * getPercentReadiness());
+	}
+
+	public CItemRevision getParentRevision() {
+		if (parentRevision != null || relationships == null
+				|| relationships.isEmpty())
+			return parentRevision;
+		for (CItemsRelationship relationship : relationships) {
+			if (relationship.getType().isParentFor()) {
+				this.parentRevision = relationship.getcItemRevisionFrom();
+				return relationship.getcItemRevisionFrom();
+			}
+		}
+		return null;
+	}
+
+	public void setParentRevision(CItemRevision parentRevision) {
+		this.parentRevision = parentRevision;
 	}
 
 }
