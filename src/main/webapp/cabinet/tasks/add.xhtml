@@ -13,7 +13,7 @@
       <h1>Создание задачи</h1>
       <p:messages globalOnly="true" />
         <scms:editTask />
-	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false">
+	<p:dialog widgetVar="modalSearch" header="Поиск документов" modal="true" resizable="false" closable="false">
 		<h:form>
 		<table>
 			<tbody>
@@ -101,7 +101,7 @@
 		<p:commandButton onclick="modalSearch.hide();" value="Закрыть" type="button" rendered="#{userTask.object.id != 0}"/>
 		</h:form>
 	</p:dialog>
-	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false">
+	<p:dialog widgetVar="modalAddDocument" header="Добавить выходной документ"  modal="true" resizable="false" closable="false">
 		<h:form>
 			<table class="editTable">
 		<tbody>
@@ -131,7 +131,7 @@
 			<tbody>
 				<tr>
 					<td class="label"><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
-					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"/></td>
+					<td><p:inputText id="laboriousness" value="#{userTask.document.laboriousness}" required="true" requiredMessage="Поле не может быть пустым" styleClass="value"><p:ajax event="change"/></p:inputText></td>
 					<td><p:message display="text" for="laboriousness"/></td>
 				</tr>
 				<tr>
@@ -148,6 +148,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentResourceManager}" id="documentResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentResourceManager" display="text"/></td>
@@ -158,6 +159,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentCurator}" id="documentCurator">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentCurator" display="text"/></td>
@@ -168,6 +170,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentPerformer}" id="documentPerformer">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentPerformer" display="text"/></td>
@@ -178,6 +181,7 @@
 						<p:selectOneMenu value="#{userTask.selectedDocumentController}" id="documentController">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userTask.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="documentController" display="text"/></td>
@@ -220,7 +224,7 @@
 			<p:commandButton onclick="modalAddDocument.hide();" value="Отмена" type="button"/>
 		</h:form>
 	</p:dialog>
-	<p:dialog widgetVar="modalAddParentTask" header="Добавить задачу верхнего уровня" modal="true" resizable="false">
+	<p:dialog widgetVar="modalAddParentTask" header="Добавить задачу верхнего уровня" modal="true" resizable="false" closable="false">
 		<h:form>
 		<table>
 			<tbody>

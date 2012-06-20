@@ -51,7 +51,10 @@
 			<tbody>
 				<tr>
 					<td class="label"><h:outputText value="Трудоемкость работы над документом (дни):"/></td>
-					<td class="label"><p:inputText id="laboriousness" value="#{userDocument.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым"/></td>
+					<td class="label">
+						<p:inputText id="laboriousness" value="#{userDocument.object.laboriousness}" required="true" requiredMessage="Поле не может быть пустым">
+							<p:ajax event="change"/>
+						</p:inputText></td>
 					<td><p:message display="text" for="laboriousness"/></td>
 				</tr>
 				<tr>
@@ -59,6 +62,7 @@
 					<td>
 						<p:selectOneMenu value="#{userDocument.object.difficulty}" >
 							<f:selectItems value="#{userDocument.difficultyCoeffs}" var="d" itemLabel="#{d.difficultyCoeffValue}" itemValue="#{d}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 				</tr>
@@ -75,6 +79,7 @@
 						<p:selectOneMenu value="#{userDocument.selectedResourceManager}" id="objectResourceManager" required="true" requiredMessage="Необходимо выбрать распорядителя ресурсов">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="objectResourceManager" display="text"/></td>
@@ -85,6 +90,7 @@
 						<p:selectOneMenu value="#{userDocument.selectedCurator}" id="objectCurator">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="objectCurator" display="text"/></td>
@@ -95,6 +101,7 @@
 						<p:selectOneMenu value="#{userDocument.selectedPerformer}" id="objectPerformer">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="objectPerformer" display="text"/></td>
@@ -105,6 +112,7 @@
 						<p:selectOneMenu value="#{userDocument.selectedController}" id="objectController">
 							<f:selectItem itemLabel="Выберите пользователя" />
 							<f:selectItems value="#{userDocument.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+							<p:ajax event="change"/>
 						</p:selectOneMenu>
 					</td>
 					<td><p:message for="objectController" display="text"/></td>
