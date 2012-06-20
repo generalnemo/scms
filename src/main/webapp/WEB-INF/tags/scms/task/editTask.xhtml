@@ -147,6 +147,10 @@
 						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.id}"/></td>
 					</tr>
 					<tr>
+						<td class="label"><h:outputText value="Название задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.name}"/></td>
+					</tr>
+					<tr>
 						<td class="label"><h:outputText value="Автор задачи:"/></td>
 						<td><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.createdBy.fullName}"/></td>
 					</tr>

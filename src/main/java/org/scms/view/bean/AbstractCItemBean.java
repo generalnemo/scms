@@ -170,10 +170,16 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 			object.getRevisions().remove(revisionsCount - 1);
 		}
 		super.saveObject();
+		PrettyRedirector.getInstance().redirect(fContext,
+				getProperty(PRETTY_CATALOG));
+		return;
 	}
 
 	public void saveObjectRevision() {
 		super.saveObject();
+		PrettyRedirector.getInstance().redirect(fContext,
+				getProperty(PRETTY_CATALOG));
+		return;
 	}
 
 	public void createLogEntryForNewRevision() {

@@ -153,6 +153,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 				.getCurrentRevision(object);
 		revisionService.updateRelationships(
 				CItemRelationshipType.IS_OUTPUT_FOR, currentRevision);
+		
 	}
 
 	public void onNodeSelectListener(NodeSelectEvent event) {
