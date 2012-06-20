@@ -44,16 +44,18 @@ public class AuthentificationBean implements Serializable {
 		try {
 			MessageDigest md5 = null;
 			byte messageDigest[] = null;
-
 			try {
 				md5 = MessageDigest.getInstance("md5");
 				md5.reset();
 				md5.update(password.getBytes());
 				messageDigest = md5.digest();
-				for (int i = 0; i < messageDigest.length; i++) {
-					hexString.append(Integer
-							.toHexString(0xFF & messageDigest[i]));
-				}
+				
+				for (int i=0;i<messageDigest.length;i++) {
+		    		String hex=Integer.toHexString(0xff & messageDigest[i]);
+		   	     	if(hex.length()==1) hexString.append('0');
+		   	     	hexString.append(hex);
+		    	}
+				logger.info(hexString.toString());
 			} catch (NoSuchAlgorithmException e) {
 				logger.error(e.getMessage());
 			}
