@@ -18,6 +18,7 @@
 					<td><h:outputText value="Категория контроля:"/></td>
 					<td><h:outputText value="Название:"/></td>
 					<td><h:outputText value="Дата создания:"/></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td><p:inputText id="idSearch" value="#{userTaskCatalog.filter.id}"/></td>
@@ -28,13 +29,20 @@
 						</p:selectOneMenu>
 					</td>
 					<td><p:inputText id="nameSearch" value="#{userTaskCatalog.filter.objectName}"/></td>
-					<td><p:calendar id="dateSearch" value="#{userTaskCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTaskCatalog.currentDate}" readonlyInput="true"/></td>					
+					<td><p:calendar id="dateSearch" value="#{userTaskCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userTaskCatalog.currentDate}">
+					<p:ajax event="dateSelect" />
+					</p:calendar></td>
+					<td>
+						<p:commandButton value="Найти" action="#{userTaskCatalog.findByFilter}" process="@form" update="dataTable"/>
+						<h:link value="Создать задачу" outcome="/cabinet/tasks/add" />
+					</td>					
 				</tr>
 				<tr>
 					<td><h:outputText value="Автор:"/></td>
 					<td><h:outputText value="Куратор:"/></td>
 					<td><h:outputText value="Исполнитель:"/></td>
 					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td><h:outputText value="Контролер:"/></td>
 				</tr>
 				<tr>
 					<td>
@@ -61,11 +69,17 @@
 							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
 						</p:selectOneMenu>
 					</td>
-					<td><p:commandButton value="Найти" action="#{userTaskCatalog.findByFilter}" process="@form" update="dataTable"/></td>
-					<td><h:link value="Создать задачу" outcome="/cabinet/tasks/add" /></td>
+					<td>
+						<p:selectOneMenu value="#{userTaskCatalog.filter.controller}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userTaskCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
+					
 				</tr>
 			</tbody>
 		</table>
+		<br/>
       	<p:dataTable value="#{userTaskCatalog.objects}" var="task" paginator="true"
                          rows="5" emptyMessage="Задач не найдено" paginatorPosition="bottom" id="dataTable">
 				<p:column sortBy="#{task.id}">

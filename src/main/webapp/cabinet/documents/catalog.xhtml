@@ -18,6 +18,7 @@
 					<td><h:outputText value="Категория контроля:"/></td>
 					<td><h:outputText value="Название:"/></td>
 					<td><h:outputText value="Дата создания:"/></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td><p:inputText id="idSearch" value="#{userDocumentCatalog.filter.id}"/></td>
@@ -28,13 +29,19 @@
 						</p:selectOneMenu>
 					</td>
 					<td><p:inputText id="nameSearch" value="#{userDocumentCatalog.filter.objectName}"/></td>
-					<td><p:calendar id="dateSearch" value="#{userDocumentCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userDocumentCatalog.currentDate}" readonlyInput="true"/></td>					
+					<td><p:calendar id="dateSearch" value="#{userDocumentCatalog.filter.createdAt}" mode="popup" readOnlyInputText="true" maxdate="#{userDocumentCatalog.currentDate}" /></td>					
+					<td>
+						<p:commandButton value="Найти" action="#{userDocumentCatalog.findByFilter}" process="@form" update="dataTable"/>
+						<h:link value="Создать документ" outcome="/cabinet/documents/add" />
+					</td>
+					<td></td>
 				</tr>
 				<tr>
 					<td><h:outputText value="Автор:"/></td>
 					<td><h:outputText value="Куратор:"/></td>
 					<td><h:outputText value="Исполнитель:"/></td>
 					<td><h:outputText value="Распорядитель ресурсов:"/></td>
+					<td><h:outputText value="Контролер:"/></td>
 				</tr>
 				<tr>
 					<td>
@@ -61,8 +68,12 @@
 							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
 						</p:selectOneMenu>
 					</td>
-					<td><p:commandButton value="Найти" action="#{userDocumentCatalog.findByFilter}" process="@form" update="dataTable"/></td>
-					<td><h:link value="Создать документ" outcome="/cabinet/documents/add" /></td>
+					<td>
+						<p:selectOneMenu value="#{userDocumentCatalog.filter.controller}">
+							<f:selectItem itemLabel="Выберите пользователя"/>
+							<f:selectItems value="#{userDocumentCatalog.userList}" var="u" itemLabel="#{u.fullName}" itemValue="#{u.userLoginName}"/>
+						</p:selectOneMenu>
+					</td>
 				</tr>
 			</tbody>
 		</table>
