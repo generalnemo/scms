@@ -142,6 +142,10 @@ public abstract class AbstractCItemBean extends AbstractObjectBean<CItem>
 		super.saveObject();
 	}
 	
+	public void saveObjectRevision() {
+		super.saveObject();
+	}
+	
 	public void createLogEntryForNewRevision() {
 		int revisionsSize = object.getRevisions().size();
 		CItemRevision revision = object.getRevisions().get(revisionsSize - 1);

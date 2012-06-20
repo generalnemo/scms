@@ -128,6 +128,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 				.get(revisionsCount - 1)
 				.setPrevRevision(
 						object.getSelectedCItemRevision().getRevision());
+		object.getSelectedCItemRevision().getRevision().setCurrentRevision(false);
 		for (CItemRevision revision : object.getRevisions()) {
 			revision.setCurrentRevision(false);
 		}
@@ -147,7 +148,7 @@ public class UserDocumentBean extends AbstractCItemBean {
 		} catch (Exception e) {
 			logger.error(e);
 		}
-		super.saveObject();
+		super.saveObjectRevision();
 		CItemRevision currentRevision = revisionService
 				.getCurrentRevision(object);
 		revisionService.updateRelationships(
