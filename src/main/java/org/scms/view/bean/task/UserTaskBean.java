@@ -1,5 +1,6 @@
 package org.scms.view.bean.task;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,10 +12,10 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.enumerate.citem.CItemOperationType;
 import org.scms.enumerate.citem.CItemRelationshipType;
 import org.scms.enumerate.citem.CItemType;
-import org.scms.enumerate.citem.CItemControlCategory;
 import org.scms.model.entity.CItem;
 import org.scms.model.entity.CItemRevision;
 import org.scms.model.entity.CItemsRelationship;
@@ -33,7 +34,7 @@ public class UserTaskBean extends AbstractCItemBean {
 
 	private CItemRevisionSearchFilter filter;
 
-	private List<CItemRevision> foundDocumentVersions;
+	private List<CItemRevision> foundCItemsRevisions;
 
 	@Inject
 	private CItemRevisionService revisionService;
@@ -56,16 +57,42 @@ public class UserTaskBean extends AbstractCItemBean {
 	}
 
 	public void findDocuments() {
-		foundDocumentVersions = revisionService.execute(filter);
+		filter.setType(CItemType.DOCUMENT);
+		foundCItemsRevisions = revisionService.execute(filter);
+	}
+
+	public void findTasks() {
+		filter.setType(CItemType.TASK);
+		foundCItemsRevisions = revisionService.execute(filter);
+	}
+
+	public void clearSearchResults() {
+		filter = new CItemRevisionSearchFilter();
+		if (foundCItemsRevisions != null)
+			foundCItemsRevisions.clear();
 	}
 
 	public void addToAdded(CItemRevision documentRevision) {
-		CItemsRelationship relationship = new CItemsRelationship();
-		relationship.setType(CItemRelationshipType.IS_INPUT_TO);
-		relationship.setCreatedBy(userBean.getCurrentUser());
-		relationship.setcItemRevisionFrom(documentRevision);
-		relationship.setcItemRevisionTo(object.getRevisions().get(0));
-		object.getRevisions().get(0).getRelationships().add(relationship);
+		addRelationship(documentRevision, CItemRelationshipType.IS_INPUT_TO);
+	}
+
+	public void addParentTaskRevision(CItemRevision taskRevision) {
+		object.getRevisions().get(0).setParentRevision(null);
+		CItemsRelationship prevParentRelationship = null;
+		for (CItemsRelationship relationship : object.getRevisions().get(0)
+				.getRelationships()) {
+			if (relationship.getType().isParentFor()) {
+				prevParentRelationship = relationship;
+				break;
+			}
+		}
+		if (prevParentRelationship != null) {
+			object.getRevisions().get(0).getRelationships()
+					.remove(prevParentRelationship);
+		}
+		addRelationship(taskRevision, CItemRelationshipType.IS_PARENT_FOR);
+		filter = new CItemRevisionSearchFilter();
+		foundCItemsRevisions = new ArrayList<CItemRevision>();
 	}
 
 	public void documentUploadListener(FileUploadEvent event) {
@@ -77,10 +104,11 @@ public class UserTaskBean extends AbstractCItemBean {
 			revision.setFileName(file.getFileName());
 		}
 	}
-	
+
 	public void deleteUploadedDocument() {
 		int revisionsCount = document.getRevisions().size();
-		CItemRevision revision = document.getRevisions().get(revisionsCount - 1);
+		CItemRevision revision = document.getRevisions()
+				.get(revisionsCount - 1);
 		revision.setData(null);
 		revision.setContentType(null);
 		revision.setFileName(null);
@@ -116,48 +144,26 @@ public class UserTaskBean extends AbstractCItemBean {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		CItemsRelationship relationship = new CItemsRelationship();
-		relationship.setType(CItemRelationshipType.IS_OUTPUT_FOR);
-		relationship.setCreatedBy(userBean.getCurrentUser());
-		relationship.setcItemRevisionFrom(document.getRevisions().get(0));
-		relationship.setcItemRevisionTo(object.getRevisions().get(0));
-		object.getRevisions().get(0).getRelationships().add(relationship);
+		addRelationship(document.getRevisions().get(0), CItemRelationshipType.IS_OUTPUT_FOR);
 		context.addCallbackParam("valid", true);
 		createNewDocument();
 	}
+	
+	public void deleteParentTaskRevision(CItemRevision revision) {
+		deleteRelationship(revision, CItemRelationshipType.IS_PARENT_FOR);
+		object.getRevisions().get(0).setParentRevision(null);
+	}
 
 	public void deleteInputDocument(CItemRevision revision) {
-		CItemsRelationship relationship = null;
-		for (CItemsRelationship r : object.getRevisions().get(0)
-				.getRelationships()) {
-			if (r.getType().isInputTo()
-					&& r.getcItemRevisionFrom().getId() == revision.getId()) {
-				relationship = r;
-				break;
-			}
-		}
-		if (relationship != null) {
-			object.getRevisions().get(0).getRelationships().remove(relationship);
-		}
+		deleteRelationship(revision, CItemRelationshipType.IS_INPUT_TO);
 	}
-	
+
 	public void deleteOutputDocument(CItemRevision revision) {
-		CItemsRelationship relationship = null;
-		for (CItemsRelationship r : object.getRevisions().get(0)
-				.getRelationships()) {
-			if (r.getType().isOutputFor()
-					&& r.getcItemRevisionFrom().getId() == revision.getId()) {
-				relationship = r;
-				break;
-			}
-		}
-		if (relationship != null) {
-			object.getRevisions().get(0).getRelationships().remove(relationship);
-			try{
+		deleteRelationship(revision, CItemRelationshipType.IS_OUTPUT_FOR);
+		try {
 			cItemService.remove(revision.getcItem());
-			}catch(Exception e){
-				logger.error(e);
-			}
+		} catch (Exception e) {
+			logger.error(e);
 		}
 	}
 
@@ -249,12 +255,12 @@ public class UserTaskBean extends AbstractCItemBean {
 		return filter;
 	}
 
-	public List<CItemRevision> getFoundDocumentVersions() {
-		return foundDocumentVersions;
-	}
-
 	public CItem getDocument() {
 		return document;
+	}
+
+	public List<CItemRevision> getFoundCItemsRevisions() {
+		return foundCItemsRevisions;
 	}
 
 }

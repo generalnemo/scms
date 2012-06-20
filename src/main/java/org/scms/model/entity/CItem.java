@@ -153,40 +153,47 @@ public class CItem extends AbstractTemporalModel {
 							dateValue, dateValue));
 		}
 		if (curator != null) {
-			entry.getEditedProperties().add(
-					new LogEntryEditedProperty(entry,
-							CItemEditableProperties.CURATOR,
-							curator.getUserLoginName(), curator.getFullName()));
+			entry.getEditedProperties()
+					.add(new LogEntryEditedProperty(entry,
+							CItemEditableProperties.CURATOR, curator
+									.getUserLoginName(), curator.getFullName()));
 		}
 		if (performer != null) {
 			entry.getEditedProperties().add(
 					new LogEntryEditedProperty(entry,
-							CItemEditableProperties.PERFORMER,
-							performer.getUserLoginName(), performer.getFullName()));
+							CItemEditableProperties.PERFORMER, performer
+									.getUserLoginName(), performer
+									.getFullName()));
 		}
 		if (controller != null) {
 			entry.getEditedProperties().add(
 					new LogEntryEditedProperty(entry,
-							CItemEditableProperties.CONTROLLER,
-							controller.getUserLoginName(), controller.getFullName()));
+							CItemEditableProperties.CONTROLLER, controller
+									.getUserLoginName(), controller
+									.getFullName()));
 		}
 		if (resourceManager != null) {
 			entry.getEditedProperties().add(
 					new LogEntryEditedProperty(entry,
 							CItemEditableProperties.RESOURCE_MANAGER,
-							resourceManager.getUserLoginName(), resourceManager.getFullName()));
+							resourceManager.getUserLoginName(), resourceManager
+									.getFullName()));
 		}
 		if (difficulty != null) {
 			entry.getEditedProperties().add(
 					new LogEntryEditedProperty(entry,
-							CItemEditableProperties.DIFFICULTY,
-							String.valueOf(difficulty.getDifficultyCoeffValue()), String.valueOf(difficulty.getDifficultyCoeffValue())));
+							CItemEditableProperties.DIFFICULTY, String
+									.valueOf(difficulty
+											.getDifficultyCoeffValue()), String
+									.valueOf(difficulty
+											.getDifficultyCoeffValue())));
 		}
 		if (laboriousness != null) {
 			entry.getEditedProperties().add(
 					new LogEntryEditedProperty(entry,
-							CItemEditableProperties.LABORIOUSNESS,
-							String.valueOf(laboriousness), String.valueOf(laboriousness)));
+							CItemEditableProperties.LABORIOUSNESS, String
+									.valueOf(laboriousness), String
+									.valueOf(laboriousness)));
 		}
 	}
 

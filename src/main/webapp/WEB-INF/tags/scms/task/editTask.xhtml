@@ -130,12 +130,37 @@
         			</td>
         			<td><p:message for="endProcessDate" display="text"/></td>
 				</tr>
+				<ui:fragment rendered="#{userTask.object.revisions[0].parentRevision != null}">
+					<tr>
+						<td><h:outputText value="Задача верхнего уровня:"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Номер задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.id}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Автор задачи:"/></td>
+						<td><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.createdBy.fullName}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Категория контроля для задачи:"/></td>
+						<td class="value"><h:outputText value="#{userTask.object.revisions[0].parentRevision.cItem.cCategory.description}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><h:outputText value="Дата создания задачи:"/></td>
+						<td><h:outputText value="#{userTask.object.revisions[0].parentRevision.formattedCreatedAtDate}"/></td>
+					</tr>
+					<tr>
+						<td class="label"><p:commandLink value="Удалить" action="#{userTask.deleteParentTaskRevision(userTask.object.revisions[0].parentRevision)}" rendered="#{userTask.object.id == 0}" process="@this"/></td>
+					</tr>
+			</ui:fragment>
 				</tbody>
 				</table>
 				</ui:fragment>	
 			</p:outputPanel>
 		<p:commandButton onclick="modalInputDocuments.show();" value="Перечень входных документов" type="button"/>
        	<p:commandButton onclick="modalOutputDocuments.show();" value="Перечень выходных документов" type="button"/>
+       	<p:commandButton onclick="modalAddParentTask.show();" value="Добавить задачу верхнего уровня" type="button" rendered="#{userTask.object.id == 0}"/>
        	<p:commandButton value="История изменений атрибутов задачи" action="#{userTask.renderAttributesHistory}" process="@this" oncomplete="modalAttributesHistory.show();" rendered="#{userTask.object.id != 0}"/>				
         <p:commandButton value="Создать задачу" action="#{userTask.addObject}" ajax="false" rendered="#{userTask.object.id == 0}"/>
         <p:commandButton value="Сохранить изменения" action="#{userTask.saveObject}" ajax="false" rendered="#{userTask.object.id != 0}"/>
